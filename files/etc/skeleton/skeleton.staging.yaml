@@ -1,0 +1,6 @@
+server:
+    port: ":8080"
+database:
+    master: ""
+api:
+    auth: "https://auth.jx-staging/auth"
