@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 GO := go
-NAME := skeleton # Replace with your appication name
+NAME := stock # Replace with your appication name
 OS := $(shell uname)
 MAIN_GO := cmd/http/main.go
 GO_VERSION := $(shell $(GO) version | sed -e 's/^[^0-9.]*\([0-9.]*\).*/\1/')

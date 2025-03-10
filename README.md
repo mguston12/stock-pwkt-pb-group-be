@@ -1,1 +1,1 @@
-# Go Project Layout Skeleton
+# Go Project Layout Stock

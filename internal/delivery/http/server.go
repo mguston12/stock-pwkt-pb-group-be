@@ -3,20 +3,23 @@ package http
 import (
 	"net/http"
 
-	"skeleton/pkg/grace"
+	"stock/pkg/grace"
 
 	"github.com/rs/cors"
 )
 
-// SkeletonHandler ...
-type SkeletonHandler interface {
+
+type StockHandler interface {
 	// Masukkan fungsi handler di sini
-	GetSkeleton(w http.ResponseWriter, r *http.Request)
+	GetAllSparepart(w http.ResponseWriter, r *http.Request)
+	CreateSparepart(w http.ResponseWriter, r *http.Request)
+	UpdateSparepart(w http.ResponseWriter, r *http.Request)
+	DeleteSparepart(w http.ResponseWriter, r *http.Request)
 }
 
 // Server ...
 type Server struct {
-	Skeleton SkeletonHandler
+	Stock StockHandler
 }
 
 // Serve is serving HTTP gracefully on port x ...

@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"skeleton/pkg/response"
+	"stock/pkg/response"
 
 	"github.com/gorilla/mux"
 )
@@ -21,7 +21,12 @@ func (s *Server) Handler() *mux.Router {
 	router.HandleFunc("", defaultHandler).Methods("GET")
 	router.HandleFunc("/", defaultHandler).Methods("GET")
 	// Routes
-	router.HandleFunc("/logbook", s.Skeleton.GetSkeleton).Methods("GET")
+
+	sparepart := r.PathPrefix("/spareparts").Subrouter()
+	sparepart.HandleFunc("", s.Stock.GetAllSparepart).Methods("GET")
+	sparepart.HandleFunc("/create", s.Stock.CreateSparepart).Methods("POST")
+	sparepart.HandleFunc("/update", s.Stock.UpdateSparepart).Methods("PUT")
+	sparepart.HandleFunc("/delete", s.Stock.DeleteSparepart).Methods("DELETE")
 
 	return r
 }

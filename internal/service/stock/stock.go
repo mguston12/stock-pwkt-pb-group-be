@@ -1,15 +1,17 @@
-package skeleton
+package stock
 
 import (
 	"context"
-
-	"github.com/pkg/errors"
+	"stock/internal/entity/stock"
 )
 
 // Data ...
 // Masukkan function dari package data ke dalam interface ini
 type Data interface {
-	GetSkeleton(ctx context.Context) error
+	GetAllSpareparts(ctx context.Context) ([]stock.Sparepart, error)
+	CreateSparepart(ctx context.Context, sparepart stock.Sparepart) error
+	UpdateSparepart(ctx context.Context, sparepart stock.Sparepart) error
+	DeleteSparepart(ctx context.Context, id string) error
 }
 
 // Service ...
@@ -25,13 +27,4 @@ func New(data Data) Service {
 	return Service{
 		data: data,
 	}
-}
-
-// GetSkeleton ...
-func (s Service) GetSkeleton(ctx context.Context) error {
-	err := s.data.GetSkeleton(ctx)
-	if err != nil {
-		return errors.Wrap(err, "[SERVICE][GetSkeleton]")
-	}
-	return nil
 }
