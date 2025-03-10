@@ -1,1 +1,1 @@
-# Go Project Layout Stock
+# stock-pb-group
