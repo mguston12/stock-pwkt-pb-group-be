@@ -27,6 +27,12 @@ func HTTP() error {
 		log.Fatalf("[DB] Failed to initialize database connection: %v", err)
 	}
 
+	_, err = db.Exec("SET time_zone = '+07:00'")
+	if err != nil {
+		log.Fatalf("[DB] Failed to set time zone: %v", err)
+		return err
+	}
+
 	// Diganti dengan domain yang anda buat
 	sd := stockData.New(db)
 	ss := stockService.New(sd)

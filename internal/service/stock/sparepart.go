@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"math"
 	"stock/internal/entity/stock"
 	"stock/pkg/errors"
 )
@@ -14,6 +15,36 @@ func (s Service) GetAllSpareparts(ctx context.Context) ([]stock.Sparepart, error
 	}
 
 	return sparepart, nil
+}
+
+func (s Service) GetSparepartsFiltered(ctx context.Context, keyword string, page, length int) ([]stock.Sparepart, int, error) {
+	limit := length
+	offset := (page - 1) * length
+	var lastPage int
+
+	if page != 0 && length != 0 {
+		spareparts, count, err := s.data.GetAllSparepartsCount(ctx, keyword)
+		if err != nil {
+			return spareparts, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFiltered][COUNT]")
+
+		}
+
+		lastPage = int(math.Ceil(float64(count) / float64(length)))
+
+		spareparts, err = s.data.GetAllSparepartsPage(ctx, keyword, offset, limit)
+		if err != nil {
+			return spareparts, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFiltered]")
+		}
+
+		return spareparts, lastPage, nil
+	}
+
+	spareparts, err := s.data.GetAllSpareparts(ctx)
+	if err != nil {
+		return spareparts, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFilteredf]")
+	}
+
+	return spareparts, lastPage, nil
 }
 
 func (s Service) CreateSparepart(ctx context.Context, sparepart stock.Sparepart) error {

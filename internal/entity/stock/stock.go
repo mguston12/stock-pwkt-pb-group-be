@@ -1,7 +1,71 @@
 package stock
 
+import "time"
+
 type Sparepart struct {
 	ID       string `db:"id_sparepart" json:"id_sparepart"`
 	Nama     string `db:"nama_sparepart" json:"nama_sparepart"`
 	Quantity int    `db:"quantity" json:"quantity"`
+}
+
+type Teknisi struct {
+	ID       string `db:"id_teknisi" json:"id_teknisi"`
+	Nama     string `db:"nama_teknisi" json:"nama_teknisi"`
+	ActiveYN string `db:"active_yn" json:"active_yn"`
+}
+
+type Machine struct {
+	ID       string `db:"id_machine" json:"id_machine"`
+	Type     string `db:"tipe_machine" json:"tipe_machine"`
+	Counter  int    `db:"counter" json:"counter"`
+	Customer string `db:"id_customer" json:"id_customer"`
+	History  []SparepartHistory
+}
+
+type Request struct {
+	ID             int       `db:"id_request" json:"id_request"`
+	Teknisi        string    `db:"id_teknisi" json:"id_teknisi"`
+	NamaTeknisi    string    `db:"nama_teknisi" json:"nama_teknisi"`
+	Mesin          string    `db:"id_mesin" json:"id_mesin"`
+	TipeMesin      string    `db:"tipe_machine" json:"tipe_machine"`
+	Sparepart      string    `db:"id_sparepart" json:"id_sparepart"`
+	NamaSparepart  string    `db:"nama_sparepart" json:"nama_sparepart"`
+	Quantity       int       `db:"quantity" json:"quantity"`
+	Status         string    `db:"status_request" json:"status_request"`
+	TanggalRequest time.Time `db:"tanggal_request" json:"tanggal_request"`
+	UpdatedBy      string    `db:"updated_by" json:"updated_by"`
+	UpdatedAt      time.Time `db:"updated_at" json:"updated_at"`
+	Customer       string    `db:"nama_customer" json:"nama_customer"`
+}
+
+type SparepartHistory struct {
+	IDHistory     int       `db:"id_history" json:"id_history"`
+	IDTeknisi     string    `db:"id_teknisi" json:"id_teknisi"`
+	NamaTeknisi   string    `json:"nama_teknisi"`
+	IDMachine     string    `db:"id_machine" json:"id_machine"`
+	IDSparepart   string    `db:"id_sparepart" json:"id_sparepart"`
+	NamaSparepart string    `json:"nama_sparepart"`
+	IDRequest     int       `db:"id_request" json:"id_request"`
+	Quantity      int       `db:"quantity" json:"quantity"`
+	UpdatedBy     string    `db:"updated_by" json:"updated_by"`
+	UpdatedAt     time.Time `db:"updated_at" json:"updated_at"`
+}
+
+type Customer struct {
+	ID           string    `db:"id_customer" json:"id_customer"`
+	Company      int       `db:"company_id" json:"company_id"`
+	NamaCustomer string    `db:"nama_customer" json:"nama_customer"`
+	Alamat       string    `db:"alamat" json:"alamat"`
+	PIC          string    `db:"pic" json:"pic"`
+	UpdatedBy    string    `db:"updated_by" json:"updated_by"`
+	UpdatedAt    time.Time `db:"updated_at" json:"updated_at"`
+}
+
+type User struct {
+	Username string `db:"username" json:"username"`
+	Password string `db:"password" json:"password"`
+}
+
+type LoginResponse struct {
+	Message string `json:"message"`
 }

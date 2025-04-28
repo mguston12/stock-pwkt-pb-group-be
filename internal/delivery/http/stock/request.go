@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func (h *Handler) GetAllSparepart(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetAllRequests(w http.ResponseWriter, r *http.Request) {
 	var (
 		result   interface{}
 		metadata interface{}
@@ -20,7 +20,7 @@ func (h *Handler) GetAllSparepart(w http.ResponseWriter, r *http.Request) {
 	defer resp.RenderJSON(w, r)
 
 	ctx := r.Context()
-	result, err = h.stockSvc.GetAllSpareparts(ctx)
+	result, err = h.stockSvc.GetAllRequests(ctx)
 
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
@@ -34,7 +34,7 @@ func (h *Handler) GetAllSparepart(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
 }
 
-func (h *Handler) GetSparepartsFiltered(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetRequestsPagination(w http.ResponseWriter, r *http.Request) {
 	var (
 		result   interface{}
 		metadata interface{}
@@ -47,7 +47,7 @@ func (h *Handler) GetSparepartsFiltered(w http.ResponseWriter, r *http.Request) 
 	length, _ := strconv.Atoi(r.FormValue("length"))
 
 	ctx := r.Context()
-	result, metadata, err = h.stockSvc.GetSparepartsFiltered(ctx, r.FormValue("keyword"), page, length)
+	result, metadata, err = h.stockSvc.GetRequestsPagination(ctx, page, length)
 
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
@@ -61,22 +61,22 @@ func (h *Handler) GetSparepartsFiltered(w http.ResponseWriter, r *http.Request) 
 	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
 }
 
-func (h *Handler) CreateSparepart(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) CreateRequest(w http.ResponseWriter, r *http.Request) {
 	resp := response.Response{}
 	defer resp.RenderJSON(w, r)
 
 	ctx := r.Context()
 
-	sparepart := stock.Sparepart{}
+	request := stock.Request{}
 
-	err := json.NewDecoder(r.Body).Decode(&sparepart)
+	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
 		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
 		return
 	}
 
-	err = h.stockSvc.CreateSparepart(ctx, sparepart)
+	err = h.stockSvc.CreateRequest(ctx, request)
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
 		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
@@ -86,22 +86,22 @@ func (h *Handler) CreateSparepart(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
 }
 
-func (h *Handler) UpdateSparepart(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) UpdateRequest(w http.ResponseWriter, r *http.Request) {
 	resp := response.Response{}
 	defer resp.RenderJSON(w, r)
 
 	ctx := r.Context()
 
-	sparepart := stock.Sparepart{}
+	request := stock.Request{}
 
-	err := json.NewDecoder(r.Body).Decode(&sparepart)
+	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
 		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
 		return
 	}
 
-	err = h.stockSvc.UpdateSparepart(ctx, sparepart)
+	err = h.stockSvc.UpdateRequest(ctx, request)
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
 		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
@@ -111,13 +111,13 @@ func (h *Handler) UpdateSparepart(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
 }
 
-func (h *Handler) DeleteSparepart(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) DeleteRequest(w http.ResponseWriter, r *http.Request) {
 	resp := response.Response{}
 	defer resp.RenderJSON(w, r)
 
 	ctx := r.Context()
 
-	err := h.stockSvc.DeleteSparepart(ctx, r.FormValue("id"))
+	err := h.stockSvc.DeleteRequest(ctx, r.FormValue("id"))
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
 		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())

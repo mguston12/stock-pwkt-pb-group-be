@@ -34,6 +34,52 @@ func (d Data) GetAllSpareparts(ctx context.Context) ([]stock.Sparepart, error) {
 	return datas, nil
 }
 
+func (d Data) GetAllSparepartsPage(ctx context.Context, keyword string, offset, limit int) ([]stock.Sparepart, error) {
+	spareparts := []stock.Sparepart{}
+
+	_keyword := "%" + keyword + "%"
+
+	rows, err := d.stmt[getAllSparepartsPage].QueryxContext(ctx, _keyword, _keyword, _keyword, _keyword, offset, limit)
+	if err != nil {
+		return spareparts, errors.Wrap(err, "[DATA][GetAllSparepartsPage]")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		sparepart := stock.Sparepart{}
+		if err = rows.StructScan(&sparepart); err != nil {
+			return spareparts, errors.Wrap(err, "[DATA][GetAllSparepartsPage]")
+		}
+		spareparts = append(spareparts, sparepart)
+	}
+
+	return spareparts, nil
+}
+
+func (d Data) GetAllSparepartsCount(ctx context.Context, keyword string) ([]stock.Sparepart, int, error) {
+	spareparts := []stock.Sparepart{}
+	var count int
+
+	_keyword := "%" + keyword + "%"
+
+	if err := d.stmt[getAllSparepartsCount].QueryRowxContext(ctx, _keyword, _keyword, _keyword, _keyword).Scan(&count); err != nil {
+		return spareparts, count, errors.Wrap(err, "[DATA][GetAllSparepartsCount]")
+	}
+
+	return spareparts, count, nil
+}
+
+func (d Data) GetSparepartByID(ctx context.Context, id string) (stock.Sparepart, error) {
+	sparepart := stock.Sparepart{}
+
+	if err := d.stmt[getSparepartByID].QueryRowxContext(ctx, id).StructScan(&sparepart); err != nil {
+		return sparepart, errors.Wrap(err, "[DATA][GetSparepartByID]")
+	}
+
+	return sparepart, nil
+}
+
 func (d Data) CreateSparepart(ctx context.Context, sparepart stock.Sparepart) error {
 	_, err := d.stmt[createSparepart].ExecContext(ctx,
 		sparepart.ID,
@@ -42,7 +88,7 @@ func (d Data) CreateSparepart(ctx context.Context, sparepart stock.Sparepart) er
 	)
 
 	if err != nil {
-		return errors.Wrap(err, "[DATA][CreateContractDetail]")
+		return errors.Wrap(err, "[DATA][CreateSparepart]")
 	}
 	return nil
 }
@@ -55,7 +101,7 @@ func (d Data) UpdateSparepart(ctx context.Context, sparepart stock.Sparepart) er
 	)
 
 	if err != nil {
-		return errors.Wrap(err, "[DATA][CreateContractDetail]")
+		return errors.Wrap(err, "[DATA][UpdateSparepart]")
 	}
 	return nil
 }
