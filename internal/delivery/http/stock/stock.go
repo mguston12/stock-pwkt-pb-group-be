@@ -20,6 +20,7 @@ type StockSvc interface {
 
 	GetAllMachines(ctx context.Context) ([]stock.Machine, error)
 	GetMachineByID(ctx context.Context, id string) (stock.Machine, error)
+	GetMachineByIDCustomer(ctx context.Context, id string) ([]stock.Machine, error)
 	CreateMachine(ctx context.Context, machine stock.Machine) error
 	UpdateMachine(ctx context.Context, machine stock.Machine) error
 	DeleteMachine(ctx context.Context, id string) error
@@ -30,7 +31,7 @@ type StockSvc interface {
 	DeleteCustomer(ctx context.Context, id string) error
 
 	GetAllRequests(ctx context.Context) ([]stock.Request, error)
-	GetRequestsPagination(ctx context.Context, page, length int) ([]stock.Request, int, error) 
+	GetRequestsPagination(ctx context.Context, page, length int) ([]stock.Request, int, error)
 	CreateRequest(ctx context.Context, request stock.Request) error
 	UpdateRequest(ctx context.Context, request stock.Request) error
 	DeleteRequest(ctx context.Context, id string) error

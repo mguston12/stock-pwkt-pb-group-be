@@ -24,6 +24,7 @@ type StockHandler interface {
 
 	GetAllMachines(w http.ResponseWriter, r *http.Request)
 	GetMachineByID(w http.ResponseWriter, r *http.Request)
+	GetMachineByIDCustomer(w http.ResponseWriter, r *http.Request)
 	CreateMachine(w http.ResponseWriter, r *http.Request)
 	UpdateMachine(w http.ResponseWriter, r *http.Request)
 	DeleteMachine(w http.ResponseWriter, r *http.Request)

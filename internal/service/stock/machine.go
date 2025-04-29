@@ -34,6 +34,15 @@ func (s Service) GetMachineByID(ctx context.Context, id string) (stock.Machine, 
 	return machine, nil
 }
 
+func (s Service) GetMachineByIDCustomer(ctx context.Context, id string) ([]stock.Machine, error) {
+	machine, err := s.data.GetMachineByIDCustomer(ctx, id)
+	if err != nil {
+		return machine, errors.Wrap(err, "[SERVICE][GetMachineByIDCustomer]")
+	}
+
+	return machine, nil
+}
+
 func (s Service) CreateMachine(ctx context.Context, machine stock.Machine) error {
 	err := s.data.CreateMachine(ctx, machine)
 	if err != nil {

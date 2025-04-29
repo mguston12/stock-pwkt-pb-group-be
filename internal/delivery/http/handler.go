@@ -37,6 +37,7 @@ func (s *Server) Handler() *mux.Router {
 
 	machine := r.PathPrefix("/machines").Subrouter()
 	machine.HandleFunc("", s.Stock.GetAllMachines).Methods("GET")
+	machine.HandleFunc("/customer", s.Stock.GetMachineByIDCustomer).Methods("GET")
 	machine.HandleFunc("/detail", s.Stock.GetMachineByID).Methods("GET")
 	machine.HandleFunc("/create", s.Stock.CreateMachine).Methods("POST")
 	machine.HandleFunc("/update", s.Stock.UpdateMachine).Methods("PUT")

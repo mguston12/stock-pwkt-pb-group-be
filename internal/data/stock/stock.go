@@ -109,6 +109,9 @@ const (
 	getMachineByID  = "GetMachineByID"
 	qGetMachineByID = `SELECT * FROM machine WHERE id_machine = ?`
 
+	getMachineByIDCustomer  = "GetMachineByIDCustomer"
+	qGetMachineByIDCustomer = `SELECT * FROM machine WHERE id_customer = ?`
+
 	createMachine  = "CreateMachine"
 	qCreateMachine = `INSERT INTO machine(id_machine, tipe_machine, counter, id_customer) VALUES (?,?,?,?)`
 
@@ -209,6 +212,7 @@ var (
 		//machine
 		{getAllMachines, qGetAllMachines},
 		{getMachineByID, qGetMachineByID},
+		{getMachineByIDCustomer, qGetMachineByIDCustomer},
 		//request
 		{getAllRequests, qGetAllRequests},
 		{getRequestsPage, qGetRequestsPage},

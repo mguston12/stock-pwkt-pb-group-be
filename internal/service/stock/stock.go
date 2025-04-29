@@ -30,6 +30,7 @@ type Data interface {
 
 	GetAllMachines(ctx context.Context) ([]stock.Machine, error)
 	GetMachineByID(ctx context.Context, id string) (stock.Machine, error)
+	GetMachineByIDCustomer(ctx context.Context, id string) ([]stock.Machine, error)
 	CreateMachine(ctx context.Context, machine stock.Machine) error
 	UpdateMachine(ctx context.Context, machine stock.Machine) error
 	DeleteMachine(ctx context.Context, id string) error
