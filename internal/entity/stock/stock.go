@@ -61,6 +61,14 @@ type Customer struct {
 	UpdatedAt    time.Time `db:"updated_at" json:"updated_at"`
 }
 
+type Inventory struct {
+	ID        string    `db:"id_inventory" json:"id_inventory"`
+	Teknisi   string    `db:"id_teknisi" json:"id_teknisi"`
+	Sparepart string    `db:"id_sparepart" json:"id_sparepart"`
+	Quantity  int       `db:"quantity" json:"quantity"`
+	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
+}
+
 type User struct {
 	Username string `db:"username" json:"username"`
 	Password string `db:"password" json:"password"`

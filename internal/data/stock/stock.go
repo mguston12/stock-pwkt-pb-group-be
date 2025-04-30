@@ -135,10 +135,13 @@ const (
 						JOIN machine m ON r.id_mesin = m.id_machine
 						JOIN teknisi t ON r.id_teknisi = t.id_teknisi
 						JOIN customer c ON m.id_customer = c.id_customer
+						WHERE
+							(r.id_teknisi LIKE ? OR ? = '')
 						LIMIT ?, ?`
 
 	getRequestsCount  = "GetRequestsCount"
-	qGetRequestsCount = `SELECT COUNT(*) FROM request`
+	qGetRequestsCount = `SELECT COUNT(*) FROM request WHERE
+							(id_teknisi LIKE ? OR ? = '')`
 
 	createRequest  = "CreateRequest"
 	qCreateRequest = `INSERT INTO request(id_teknisi, id_mesin, 
@@ -194,6 +197,25 @@ const (
 
 	deleteUser  = "DeleteUser"
 	qDeleteUser = `DELETE from user WHERE username = ?`
+
+	// Inventory
+	getAllInventory  = "GetAllInventory"
+	qGetAllInventory = `SELECT * FROM inventory`
+
+	getInventoryByID  = "GetInventoryByID"
+	qGetInventoryByID = `SELECT * FROM inventory WHERE id_teknisi = ?`
+
+	createInventory  = "CreateInventory"
+	qCreateInventory = `INSERT INTO inventory(id_teknisi, id_sparepart, quantity) VALUES (?,?,?)`
+
+	updateInventory  = "UpdateInventory"
+	qUpdateInventory = `UPDATE inventory 
+						SET 
+							quantity = COALESCE(NULLIF(?,''), quantity)
+						WHERE id_teknisi = ? AND id_sparepart = ?`
+
+	deleteInventory  = "DeleteInventory"
+	qDeleteInventory = "DELETE FROM inventory WHERE id_teknisi = ? AND id_sparepart = ?"
 )
 
 var (
@@ -221,6 +243,9 @@ var (
 		{getAllCustomers, qGetAllCustomers},
 		//user
 		{getUserByUsername, qGetUserByUsername},
+		//inventory
+		{getAllInventory, qGetAllInventory},
+		{getInventoryByID, qGetInventoryByID},
 	}
 	insertStmt = []statement{
 		{createSparepart, qCreateSparepart},
@@ -230,6 +255,7 @@ var (
 		{createRequest, qCreateRequest},
 		{createCustomer, qCreateCustomer},
 		{createUser, qCreateUser},
+		{createInventory, qCreateInventory},
 	}
 	updateStmt = []statement{
 		{updateSparepart, qUpdateSparepart},
@@ -239,6 +265,7 @@ var (
 		{updateRequest, qUpdateRequest},
 		{updateCustomer, qUpdateCustomer},
 		{updateUser, qUpdateUser},
+		{updateInventory, qUpdateInventory},
 	}
 	deleteStmt = []statement{
 		{deleteSparepart, qDeleteSparepart},
@@ -248,6 +275,7 @@ var (
 		{deleteRequest, qDeleteRequest},
 		{deleteCustomer, qDeleteCustomer},
 		{deleteUser, qDeleteUser},
+		{deleteInventory, qDeleteInventory},
 	}
 )
 

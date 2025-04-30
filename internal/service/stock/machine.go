@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"fmt"
 	"stock/internal/entity/stock"
 	"stock/pkg/errors"
 )
@@ -26,6 +27,8 @@ func (s Service) GetMachineByID(ctx context.Context, id string) (stock.Machine, 
 	if err != nil {
 		return machine, errors.Wrap(err, "[SERVICE][GetMachineByID]")
 	}
+
+	fmt.Println(history)
 
 	if len(history) > 0 {
 		machine.History = history

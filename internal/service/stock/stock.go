@@ -41,8 +41,8 @@ type Data interface {
 	DeleteCustomer(ctx context.Context, id string) error
 
 	GetAllRequests(ctx context.Context) ([]stock.Request, error)
-	GetRequestsPage(ctx context.Context, offset, limit int) ([]stock.Request, error)
-	GetRequestsCount(ctx context.Context) ([]stock.Request, int, error)
+	GetRequestsPage(ctx context.Context, teknisi string, offset, limit int) ([]stock.Request, error)
+	GetRequestsCount(ctx context.Context, teknisi string) ([]stock.Request, int, error)
 	CreateRequest(ctx context.Context, request stock.Request) error
 	UpdateRequest(ctx context.Context, request stock.Request) error
 	DeleteRequest(ctx context.Context, id string) error

@@ -18,13 +18,13 @@ func (s Service) GetAllRequests(ctx context.Context) ([]stock.Request, error) {
 	return request, nil
 }
 
-func (s Service) GetRequestsPagination(ctx context.Context, page, length int) ([]stock.Request, int, error) {
+func (s Service) GetRequestsPagination(ctx context.Context, teknisi string, page, length int) ([]stock.Request, int, error) {
 	limit := length
 	offset := (page - 1) * length
 	var lastPage int
 
 	if page != 0 && length != 0 {
-		requests, count, err := s.data.GetRequestsCount(ctx)
+		requests, count, err := s.data.GetRequestsCount(ctx, teknisi)
 		if err != nil {
 			return requests, lastPage, errors.Wrap(err, "[SERVICE][GetRequestsFiltered][COUNT]")
 
@@ -32,7 +32,7 @@ func (s Service) GetRequestsPagination(ctx context.Context, page, length int) ([
 
 		lastPage = int(math.Ceil(float64(count) / float64(length)))
 
-		requests, err = s.data.GetRequestsPage(ctx, offset, limit)
+		requests, err = s.data.GetRequestsPage(ctx, teknisi, offset, limit)
 		if err != nil {
 			return requests, lastPage, errors.Wrap(err, "[SERVICE][GetRequestsFiltered]")
 		}
@@ -63,7 +63,7 @@ func (s Service) UpdateRequest(ctx context.Context, request stock.Request) error
 		return errors.Wrap(err, "[SERVICE][UpdateRequest]")
 	}
 
-	if request.Status == "Approved" {
+	if request.Status == "Disetujui" {
 		history := stock.SparepartHistory{
 			IDTeknisi:   request.Teknisi,
 			IDMachine:   request.Mesin,

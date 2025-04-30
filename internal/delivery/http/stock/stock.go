@@ -31,7 +31,7 @@ type StockSvc interface {
 	DeleteCustomer(ctx context.Context, id string) error
 
 	GetAllRequests(ctx context.Context) ([]stock.Request, error)
-	GetRequestsPagination(ctx context.Context, page, length int) ([]stock.Request, int, error)
+	GetRequestsPagination(ctx context.Context, teknisi string, page, length int) ([]stock.Request, int, error)
 	CreateRequest(ctx context.Context, request stock.Request) error
 	UpdateRequest(ctx context.Context, request stock.Request) error
 	DeleteRequest(ctx context.Context, id string) error

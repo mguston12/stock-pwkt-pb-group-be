@@ -34,10 +34,10 @@ func (d Data) GetAllRequests(ctx context.Context) ([]stock.Request, error) {
 	return datas, nil
 }
 
-func (d Data) GetRequestsPage(ctx context.Context, offset, limit int) ([]stock.Request, error) {
+func (d Data) GetRequestsPage(ctx context.Context, teknisi string, offset, limit int) ([]stock.Request, error) {
 	requests := []stock.Request{}
 
-	rows, err := d.stmt[getRequestsPage].QueryxContext(ctx, offset, limit)
+	rows, err := d.stmt[getRequestsPage].QueryxContext(ctx, teknisi, teknisi, offset, limit)
 	if err != nil {
 		return requests, errors.Wrap(err, "[DATA][GetRequestsPage]")
 	}
@@ -55,11 +55,11 @@ func (d Data) GetRequestsPage(ctx context.Context, offset, limit int) ([]stock.R
 	return requests, nil
 }
 
-func (d Data) GetRequestsCount(ctx context.Context) ([]stock.Request, int, error) {
+func (d Data) GetRequestsCount(ctx context.Context, teknisi string) ([]stock.Request, int, error) {
 	requests := []stock.Request{}
 	var count int
 
-	if err := d.stmt[getRequestsCount].QueryRowxContext(ctx).Scan(&count); err != nil {
+	if err := d.stmt[getRequestsCount].QueryRowxContext(ctx, teknisi, teknisi).Scan(&count); err != nil {
 		return requests, count, errors.Wrap(err, "[DATA][GetRequestsCount]")
 	}
 
