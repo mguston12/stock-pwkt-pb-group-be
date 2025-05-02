@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"log"
 	"math"
 	"stock/internal/entity/stock"
 	"stock/pkg/errors"
@@ -64,18 +65,31 @@ func (s Service) UpdateRequest(ctx context.Context, request stock.Request) error
 	}
 
 	if request.Status == "Disetujui" {
-		history := stock.SparepartHistory{
-			IDTeknisi:   request.Teknisi,
-			IDMachine:   request.Mesin,
-			IDSparepart: request.Sparepart,
-			IDRequest:   request.ID,
-			Quantity:    request.Quantity,
-			UpdatedBy:   request.UpdatedBy,
-			UpdatedAt:   time.Now(),
-		}
-		err = s.data.CreateSparepartHistory(ctx, history)
-		if err != nil {
-			return errors.Wrap(err, "[SERVICE][UpdateRequest][CreateSparepartHistory]")
+		log.Println(request)
+		if request.Mesin != "" {
+			history := stock.SparepartHistory{
+				IDTeknisi:   request.Teknisi,
+				IDMachine:   request.Mesin,
+				IDSparepart: request.Sparepart,
+				IDRequest:   request.ID,
+				Quantity:    request.Quantity,
+				UpdatedBy:   request.UpdatedBy,
+				UpdatedAt:   time.Now(),
+			}
+			err = s.data.CreateSparepartHistory(ctx, history)
+			if err != nil {
+				return errors.Wrap(err, "[SERVICE][UpdateRequest][CreateSparepartHistory]")
+			}
+		} else {
+			inventory := stock.Inventory{
+				Teknisi:   request.Teknisi,
+				Sparepart: request.Sparepart,
+				Quantity:  request.Quantity,
+			}
+			err = s.data.CreateInventory(ctx, inventory)
+			if err != nil {
+				return errors.Wrap(err, "[SERVICE][UpdateRequest][CreateInventory]")
+			}
 		}
 
 		sparepart, err := s.data.GetSparepartByID(ctx, request.Sparepart)

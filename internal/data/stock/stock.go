@@ -130,11 +130,12 @@ const (
 	qGetAllRequests = `SELECT * FROM request`
 
 	getRequestsPage  = "GetRequestsPage"
-	qGetRequestsPage = `SELECT r.*, sp.nama_sparepart, m.tipe_machine, t.nama_teknisi, c.nama_customer FROM request r 
-						JOIN sparepart sp ON r.id_sparepart = sp.id_sparepart 
-						JOIN machine m ON r.id_mesin = m.id_machine
-						JOIN teknisi t ON r.id_teknisi = t.id_teknisi
-						JOIN customer c ON m.id_customer = c.id_customer
+	qGetRequestsPage = `SELECT r.*, sp.nama_sparepart, COALESCE(m.tipe_machine, '') AS tipe_machine, t.nama_teknisi, 
+						COALESCE(c.nama_customer, '') AS nama_customer FROM request r 
+						LEFT JOIN sparepart sp ON r.id_sparepart = sp.id_sparepart 
+						LEFT JOIN machine m ON r.id_mesin = m.id_machine
+						LEFT JOIN teknisi t ON r.id_teknisi = t.id_teknisi
+						LEFT JOIN customer c ON m.id_customer = c.id_customer
 						WHERE
 							(r.id_teknisi LIKE ? OR ? = '')
 						LIMIT ?, ?`
@@ -200,13 +201,19 @@ const (
 
 	// Inventory
 	getAllInventory  = "GetAllInventory"
-	qGetAllInventory = `SELECT * FROM inventory`
+	qGetAllInventory = `SELECT i.*, sp.nama_sparepart FROM inventory i LEFT JOIN sparepart sp ON i.id_sparepart = sp.id_sparepart`
 
 	getInventoryByID  = "GetInventoryByID"
-	qGetInventoryByID = `SELECT * FROM inventory WHERE id_teknisi = ?`
+	qGetInventoryByID = `SELECT i.*, sp.nama_sparepart FROM inventory i
+						LEFT JOIN sparepart sp ON i.id_sparepart = sp.id_sparepart 
+						WHERE id_teknisi = ?`
 
 	createInventory  = "CreateInventory"
-	qCreateInventory = `INSERT INTO inventory(id_teknisi, id_sparepart, quantity) VALUES (?,?,?)`
+	qCreateInventory = `INSERT INTO inventory(id_teknisi, id_sparepart, quantity)
+						VALUES (?, ?, ?)
+						ON DUPLICATE KEY UPDATE 
+							quantity = quantity + VALUES(quantity),
+							updated_at = NOW();`
 
 	updateInventory  = "UpdateInventory"
 	qUpdateInventory = `UPDATE inventory 

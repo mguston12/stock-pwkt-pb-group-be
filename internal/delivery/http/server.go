@@ -60,7 +60,19 @@ type Server struct {
 }
 
 // Serve is serving HTTP gracefully on port x ...
+
 func (s *Server) Serve(port string) error {
-	handler := cors.AllowAll().Handler(s.Handler())
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{
+			"http://localhost:3000",
+			"https://8e55-182-253-161-204.ngrok-free.app",
+		},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
+
+	handler := c.Handler(s.Handler())
+
 	return grace.Serve(port, handler)
 }
