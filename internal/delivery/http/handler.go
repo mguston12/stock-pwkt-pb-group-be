@@ -62,6 +62,13 @@ func (s *Server) Handler() *mux.Router {
 	user.HandleFunc("/delete", s.Stock.DeleteUser).Methods("DELETE")
 	user.HandleFunc("/login", s.Stock.MatchPassword).Methods("POST")
 
+	inventory := r.PathPrefix("/inventory").Subrouter()
+	inventory.HandleFunc("", s.Stock.GetAllInventory).Methods("GET")
+	inventory.HandleFunc("/detail", s.Stock.GetInventoryByID).Methods("GET")
+	inventory.HandleFunc("/create", s.Stock.CreateInventory).Methods("POST")
+	inventory.HandleFunc("/update", s.Stock.UpdateInventory).Methods("PUT")
+	inventory.HandleFunc("/delete", s.Stock.DeleteInventory).Methods("DELETE")
+
 	return r
 }
 

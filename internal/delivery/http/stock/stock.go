@@ -42,6 +42,12 @@ type StockSvc interface {
 	DeleteUser(ctx context.Context, username string) error
 
 	MatchPassword(ctx context.Context, login stock.User) error
+
+	GetAllInventory(ctx context.Context) ([]stock.Inventory, error)
+	GetInventoryByID(ctx context.Context, id string) ([]stock.Inventory, error)
+	CreateInventory(ctx context.Context, inventory stock.Inventory) error
+	UpdateInventory(ctx context.Context, inventory stock.Inventory) error
+	DeleteInventory(ctx context.Context, id_teknisi, id_sparepart string) error
 }
 
 type Handler struct {

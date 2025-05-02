@@ -41,7 +41,7 @@ func (d Data) GetSparepartHistoryByID(ctx context.Context, id string) ([]stock.S
 		err   error
 	)
 
-	rows, err = d.stmt[getSparepartHistoryByID].QueryxContext(ctx,id)
+	rows, err = d.stmt[getSparepartHistoryByID].QueryxContext(ctx, id)
 	if err != nil {
 		return datas, errors.Wrap(err, "[DATA][GetSparepartHistoryByID]")
 	}

@@ -51,6 +51,12 @@ type Data interface {
 	CreateUser(ctx context.Context, user stock.User) error
 	UpdateUser(ctx context.Context, user stock.User) error
 	DeleteUser(ctx context.Context, username string) error
+
+	GetAllInventory(ctx context.Context) ([]stock.Inventory, error)
+	GetInventoryByID(ctx context.Context, id string) ([]stock.Inventory, error)
+	CreateInventory(ctx context.Context, inventory stock.Inventory) error
+	UpdateInventory(ctx context.Context, inventory stock.Inventory) error
+	DeleteInventory(ctx context.Context, id_teknisi, id_sparepart string) error
 }
 
 // Service ...

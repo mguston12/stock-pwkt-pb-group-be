@@ -46,6 +46,12 @@ type StockHandler interface {
 	DeleteUser(w http.ResponseWriter, r *http.Request)
 
 	MatchPassword(w http.ResponseWriter, r *http.Request)
+
+	GetAllInventory(w http.ResponseWriter, r *http.Request)
+	GetInventoryByID(w http.ResponseWriter, r *http.Request)
+	CreateInventory(w http.ResponseWriter, r *http.Request)
+	UpdateInventory(w http.ResponseWriter, r *http.Request)
+	DeleteInventory(w http.ResponseWriter, r *http.Request)
 }
 
 // Server ...
