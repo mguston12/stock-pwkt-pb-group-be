@@ -64,8 +64,7 @@ type Server struct {
 func (s *Server) Serve(port string) error {
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{
-			"http://localhost:3000",
-			"https://8e55-182-253-161-204.ngrok-free.app",
+			"*",
 		},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},

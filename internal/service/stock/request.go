@@ -19,13 +19,13 @@ func (s Service) GetAllRequests(ctx context.Context) ([]stock.Request, error) {
 	return request, nil
 }
 
-func (s Service) GetRequestsPagination(ctx context.Context, teknisi string, page, length int) ([]stock.Request, int, error) {
+func (s Service) GetRequestsPagination(ctx context.Context, keyword, status string, page, length int) ([]stock.Request, int, error) {
 	limit := length
 	offset := (page - 1) * length
 	var lastPage int
 
 	if page != 0 && length != 0 {
-		requests, count, err := s.data.GetRequestsCount(ctx, teknisi)
+		requests, count, err := s.data.GetRequestsCount(ctx, keyword, status)
 		if err != nil {
 			return requests, lastPage, errors.Wrap(err, "[SERVICE][GetRequestsFiltered][COUNT]")
 
@@ -33,7 +33,7 @@ func (s Service) GetRequestsPagination(ctx context.Context, teknisi string, page
 
 		lastPage = int(math.Ceil(float64(count) / float64(length)))
 
-		requests, err = s.data.GetRequestsPage(ctx, teknisi, offset, limit)
+		requests, err = s.data.GetRequestsPage(ctx, keyword, status, offset, limit)
 		if err != nil {
 			return requests, lastPage, errors.Wrap(err, "[SERVICE][GetRequestsFiltered]")
 		}

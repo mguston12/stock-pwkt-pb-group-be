@@ -47,7 +47,7 @@ func (h *Handler) GetRequestsPagination(w http.ResponseWriter, r *http.Request) 
 	length, _ := strconv.Atoi(r.FormValue("length"))
 
 	ctx := r.Context()
-	result, metadata, err = h.stockSvc.GetRequestsPagination(ctx, r.FormValue("keyword"), page, length)
+	result, metadata, err = h.stockSvc.GetRequestsPagination(ctx, r.FormValue("keyword"), r.FormValue("status"), page, length)
 
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())

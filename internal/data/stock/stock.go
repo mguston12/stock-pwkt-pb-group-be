@@ -137,12 +137,17 @@ const (
 						LEFT JOIN teknisi t ON r.id_teknisi = t.id_teknisi
 						LEFT JOIN customer c ON m.id_customer = c.id_customer
 						WHERE
-							(r.id_teknisi LIKE ? OR ? = '')
+							((r.id_teknisi LIKE ? OR ? = '')
+						AND
+							(r.status_request LIKE ? OR ? = ''))
+						ORDER BY updated_at DESC
 						LIMIT ?, ?`
 
 	getRequestsCount  = "GetRequestsCount"
 	qGetRequestsCount = `SELECT COUNT(*) FROM request WHERE
-							(id_teknisi LIKE ? OR ? = '')`
+							((id_teknisi LIKE ? OR ? = '')
+						AND
+							(status_request LIKE ? OR ? = ''))`
 
 	createRequest  = "CreateRequest"
 	qCreateRequest = `INSERT INTO request(id_teknisi, id_mesin, 
