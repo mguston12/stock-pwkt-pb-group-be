@@ -48,6 +48,11 @@ type StockSvc interface {
 	CreateInventory(ctx context.Context, inventory stock.Inventory) error
 	UpdateInventory(ctx context.Context, inventory stock.Inventory) error
 	DeleteInventory(ctx context.Context, id_teknisi, id_sparepart string) error
+
+	GetPembelianSparepart(ctx context.Context) ([]stock.PembelianSparepart, error)
+	CreatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error
+	UpdatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error
+	DeletePembelianSparepart(ctx context.Context, id string) error
 }
 
 type Handler struct {

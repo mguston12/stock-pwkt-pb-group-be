@@ -69,6 +69,12 @@ func (s *Server) Handler() *mux.Router {
 	inventory.HandleFunc("/update", s.Stock.UpdateInventory).Methods("PUT")
 	inventory.HandleFunc("/delete", s.Stock.DeleteInventory).Methods("DELETE")
 
+	pembeliansp := r.PathPrefix("/purchase").Subrouter()
+	pembeliansp.HandleFunc("", s.Stock.GetPembelianSparepart).Methods("GET")
+	pembeliansp.HandleFunc("/create", s.Stock.CreatePembelianSparepart).Methods("POST")
+	pembeliansp.HandleFunc("/update", s.Stock.UpdatePembelianSparepart).Methods("PUT")
+	pembeliansp.HandleFunc("/delete", s.Stock.DeletePembelianSparepart).Methods("DELETE")
+
 	return r
 }
 

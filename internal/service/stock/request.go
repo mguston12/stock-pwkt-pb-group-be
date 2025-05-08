@@ -73,6 +73,7 @@ func (s Service) UpdateRequest(ctx context.Context, request stock.Request) error
 				IDSparepart: request.Sparepart,
 				IDRequest:   request.ID,
 				Quantity:    request.Quantity,
+				// Request:     request.Counter,
 				UpdatedBy:   request.UpdatedBy,
 				UpdatedAt:   time.Now(),
 			}

@@ -23,9 +23,10 @@ func (s Service) GetSparepartsFiltered(ctx context.Context, keyword string, page
 	var lastPage int
 
 	if page != 0 && length != 0 {
+		dataSparepart := []stock.Sparepart{}
 		spareparts, count, err := s.data.GetAllSparepartsCount(ctx, keyword)
 		if err != nil {
-			return spareparts, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFiltered][COUNT]")
+			return dataSparepart, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFiltered][COUNT]")
 
 		}
 
@@ -33,10 +34,26 @@ func (s Service) GetSparepartsFiltered(ctx context.Context, keyword string, page
 
 		spareparts, err = s.data.GetAllSparepartsPage(ctx, keyword, offset, limit)
 		if err != nil {
-			return spareparts, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFiltered]")
+			return dataSparepart, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFiltered]")
 		}
 
-		return spareparts, lastPage, nil
+		for _, sp := range spareparts {
+			cost, err := s.data.GetAverageCostSparepart(ctx, sp.ID)
+			if err != nil {
+				return dataSparepart, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFiltered]")
+			}
+
+			sp = stock.Sparepart{
+				ID:          sp.ID,
+				Nama:        sp.Nama,
+				Quantity:    sp.Quantity,
+				AverageCost: cost,
+			}
+
+			dataSparepart = append(dataSparepart, sp)
+		}
+
+		return dataSparepart, lastPage, nil
 	}
 
 	spareparts, err := s.data.GetAllSpareparts(ctx)

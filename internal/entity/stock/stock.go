@@ -3,9 +3,10 @@ package stock
 import "time"
 
 type Sparepart struct {
-	ID       string `db:"id_sparepart" json:"id_sparepart"`
-	Nama     string `db:"nama_sparepart" json:"nama_sparepart"`
-	Quantity int    `db:"quantity" json:"quantity"`
+	ID          string  `db:"id_sparepart" json:"id_sparepart"`
+	Nama        string  `db:"nama_sparepart" json:"nama_sparepart"`
+	Quantity    int     `db:"quantity" json:"quantity"`
+	AverageCost float64 `json:"average_cost"`
 }
 
 type Teknisi struct {
@@ -47,6 +48,7 @@ type SparepartHistory struct {
 	NamaSparepart string    `json:"nama_sparepart"`
 	IDRequest     int       `db:"id_request" json:"id_request"`
 	Quantity      int       `db:"quantity" json:"quantity"`
+	Counter       int       `db:"counter" json:"counter"`
 	UpdatedBy     string    `db:"updated_by" json:"updated_by"`
 	UpdatedAt     time.Time `db:"updated_at" json:"updated_at"`
 }
@@ -68,6 +70,14 @@ type Inventory struct {
 	NamaSparepart string    `db:"nama_sparepart" json:"nama_sparepart"`
 	Quantity      int       `db:"quantity" json:"quantity"`
 	UpdatedAt     time.Time `db:"updated_at" json:"updated_at"`
+}
+
+type PembelianSparepart struct {
+	ID               string    `db:"id_pembelian" json:"id_pembelian"`
+	Sparepart        string    `db:"id_sparepart" json:"id_sparepart"`
+	TanggalPembelian time.Time `db:"tanggal_pembelian" json:"tanggal_pembelian"`
+	Quantity         int       `db:"quantity" json:"quantity"`
+	HargaPerUnit     float64   `db:"harga_per_unit" json:"harga_per_unit"`
 }
 
 type User struct {

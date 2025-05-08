@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"fmt"
 	"stock/internal/entity/stock"
 
 	"stock/pkg/errors"
@@ -99,6 +100,8 @@ func (d Data) UpdateSparepart(ctx context.Context, sparepart stock.Sparepart) er
 		sparepart.Quantity,
 		sparepart.ID,
 	)
+
+	fmt.Println("sparepart update", sparepart)
 
 	if err != nil {
 		return errors.Wrap(err, "[DATA][UpdateSparepart]")

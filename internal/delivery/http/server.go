@@ -52,6 +52,11 @@ type StockHandler interface {
 	CreateInventory(w http.ResponseWriter, r *http.Request)
 	UpdateInventory(w http.ResponseWriter, r *http.Request)
 	DeleteInventory(w http.ResponseWriter, r *http.Request)
+
+	GetPembelianSparepart(w http.ResponseWriter, r *http.Request)
+	CreatePembelianSparepart(w http.ResponseWriter, r *http.Request)
+	UpdatePembelianSparepart(w http.ResponseWriter, r *http.Request)
+	DeletePembelianSparepart(w http.ResponseWriter, r *http.Request)
 }
 
 // Server ...

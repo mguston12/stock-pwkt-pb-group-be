@@ -65,7 +65,7 @@ const (
 
 	createSparepartHistory  = "CreateSparepartHistory"
 	qCreateSparepartHistory = `INSERT INTO history_sparepart(id_history, id_teknisi, id_machine, id_sparepart, id_request,
-								quantity, updated_by) VALUES (?,?,?,?,?,?,?)`
+								quantity, counter, updated_by) VALUES (?,?,?,?,?,?,?,?)`
 
 	updateSparepartHistory  = "UpdateSparepartHistory"
 	qUpdateSparepartHistory = `UPDATE history_sparepart 
@@ -75,6 +75,7 @@ const (
 							id_sparepart = COALESCE(NULLIF(?,''), id_sparepart), 
 							id_request = COALESCE(NULLIF(?,''), id_request), 
 							quantity = COALESCE(NULLIF(?,''), quantity), 
+							counter = COALESCE(NULLIF(?,''), counter), 
 							updated_by = COALESCE(NULLIF(?,''), updated_by),
 							updated_at = COALESCE(NULLIF(?,''), updated_at)
 						WHERE id_history = ?`
@@ -228,6 +229,29 @@ const (
 
 	deleteInventory  = "DeleteInventory"
 	qDeleteInventory = "DELETE FROM inventory WHERE id_teknisi = ? AND id_sparepart = ?"
+
+	//Pembelian Sparepart
+	getPembelianSparepart  = "GetPembelianSparepart"
+	qGetPembelianSparepart = "SELECT * FROM pembelian_sparepart"
+
+	createPembelianSparepart  = "CreatePembelianSparepart"
+	qCreatePembelianSparepart = `INSERT INTO pembelian_sparepart(id_sparepart, quantity, harga_per_unit) 
+								VALUES (?,?,?)`
+
+	updatePembelianSparepart  = "UpdatePembelianSparepart"
+	qUpdatePembelianSparepart = `UPDATE pembelian_sparepart
+								SET 
+									quantity = COALESCE(NULLIF(?,''), quantity),
+									harga_per_unit = COALESCE(NULLIF(?,''), harga_per_unit)
+								WHERE 
+									id_pembelian = ?`
+
+	deletePembelianSparepart  = "DeletePembelianSparepart"
+	qDeletePembelianSparepart = `DELETE from pembelian_sparepart WHERE id_pembelian = ?`
+
+	getAverageCostSparepart  = "GetAverageCostSparepart"
+	qGetAverageCostSparepart = `SELECT SUM(quantity * harga_per_unit) / SUM(quantity) AS average_cost 
+								FROM pembelian_sparepart WHERE id_sparepart = ?`
 )
 
 var (
@@ -258,6 +282,9 @@ var (
 		//inventory
 		{getAllInventory, qGetAllInventory},
 		{getInventoryByID, qGetInventoryByID},
+		//pembelian sparepart
+		{getPembelianSparepart, qGetPembelianSparepart},
+		{getAverageCostSparepart, qGetAverageCostSparepart},
 	}
 	insertStmt = []statement{
 		{createSparepart, qCreateSparepart},
@@ -268,6 +295,7 @@ var (
 		{createCustomer, qCreateCustomer},
 		{createUser, qCreateUser},
 		{createInventory, qCreateInventory},
+		{createPembelianSparepart, qCreatePembelianSparepart},
 	}
 	updateStmt = []statement{
 		{updateSparepart, qUpdateSparepart},
@@ -278,6 +306,7 @@ var (
 		{updateCustomer, qUpdateCustomer},
 		{updateUser, qUpdateUser},
 		{updateInventory, qUpdateInventory},
+		{updatePembelianSparepart, qUpdatePembelianSparepart},
 	}
 	deleteStmt = []statement{
 		{deleteSparepart, qDeleteSparepart},
@@ -288,6 +317,7 @@ var (
 		{deleteCustomer, qDeleteCustomer},
 		{deleteUser, qDeleteUser},
 		{deleteInventory, qDeleteInventory},
+		{deletePembelianSparepart, qDeletePembelianSparepart},
 	}
 )
 

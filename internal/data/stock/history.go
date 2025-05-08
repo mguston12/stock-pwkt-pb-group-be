@@ -67,6 +67,7 @@ func (d Data) CreateSparepartHistory(ctx context.Context, history stock.Sparepar
 		history.IDSparepart,
 		history.IDRequest,
 		history.Quantity,
+		history.Counter,
 		history.UpdatedBy,
 	)
 
@@ -83,6 +84,7 @@ func (d Data) UpdateSparepartHistory(ctx context.Context, history stock.Sparepar
 		history.IDSparepart,
 		history.IDRequest,
 		history.Quantity,
+		history.Counter,
 		history.UpdatedBy,
 		history.UpdatedAt,
 		history.IDHistory,
