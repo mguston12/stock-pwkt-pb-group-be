@@ -27,6 +27,7 @@ func (s *Server) Handler() *mux.Router {
 	sparepart.HandleFunc("/update", s.Stock.UpdateSparepart).Methods("PUT")
 	sparepart.HandleFunc("/delete", s.Stock.DeleteSparepart).Methods("DELETE")
 	sparepart.HandleFunc("", s.Stock.GetSparepartsFiltered).Methods("GET")
+	sparepart.HandleFunc("/cost", s.Stock.GetSparepartCost).Methods("GET")
 
 	teknisi := r.PathPrefix("/teknisi").Subrouter()
 	teknisi.HandleFunc("", s.Stock.GetAllTeknisi).Methods("GET")

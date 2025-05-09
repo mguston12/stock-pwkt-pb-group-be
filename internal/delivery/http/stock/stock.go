@@ -11,6 +11,7 @@ type StockSvc interface {
 	CreateSparepart(ctx context.Context, sparepart stock.Sparepart) error
 	UpdateSparepart(ctx context.Context, sparepart stock.Sparepart) error
 	DeleteSparepart(ctx context.Context, id string) error
+	GetSparepartCost(ctx context.Context, filter stock.SparepartCostFilter) ([]stock.SparepartCostResult, error)
 
 	GetAllTeknisi(ctx context.Context) ([]stock.Teknisi, error)
 	GetTeknisiByID(ctx context.Context, id string) (stock.Teknisi, error)

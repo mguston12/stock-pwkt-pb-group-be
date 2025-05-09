@@ -80,6 +80,22 @@ type PembelianSparepart struct {
 	HargaPerUnit     float64   `db:"harga_per_unit" json:"harga_per_unit"`
 }
 
+type SparepartCostFilter struct {
+	Year       *int
+	Month      *int
+	CustomerID *string
+	MachineID  *string
+}
+
+type SparepartCostResult struct {
+	CustomerID   string  `db:"id_customer"`   // Memetakan ke kolom id_customer
+	CustomerName string  `db:"nama_customer"` // Memetakan ke kolom nama_customer
+	MachineID    string  `db:"id_machine"`    // Memetakan ke kolom id_machine
+	Month        string  `db:"bulan"`         // Memetakan ke kolom bulan
+	Year         int     `db:"tahun"`         // Memetakan ke kolom tahun
+	TotalCost    float64 `db:"total_cost"`    // Memetakan ke kolom total_cost
+}
+
 type User struct {
 	Username string `db:"username" json:"username"`
 	Password string `db:"password" json:"password"`

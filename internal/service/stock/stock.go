@@ -63,6 +63,7 @@ type Data interface {
 	UpdatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error
 	DeletePembelianSparepart(ctx context.Context, id string) error
 	GetAverageCostSparepart(ctx context.Context, id string) (float64, error)
+	GetSparepartCost(ctx context.Context, filter stock.SparepartCostFilter) ([]stock.SparepartCostResult, error)
 }
 
 // Service ...

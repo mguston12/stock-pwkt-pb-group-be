@@ -252,6 +252,7 @@ const (
 	getAverageCostSparepart  = "GetAverageCostSparepart"
 	qGetAverageCostSparepart = `SELECT SUM(quantity * harga_per_unit) / SUM(quantity) AS average_cost 
 								FROM pembelian_sparepart WHERE id_sparepart = ?`
+
 )
 
 var (
