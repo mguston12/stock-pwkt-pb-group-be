@@ -9,14 +9,14 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func (d Data) GetAllSparepartHistory(ctx context.Context) ([]stock.SparepartHistory, error) {
+func (d Data) GetAllSparepartHistory(ctx context.Context, id_teknisi, id_mesin, id_sparepart string, offset, limit int) ([]stock.SparepartHistory, error) {
 	var (
 		rows  *sqlx.Rows
 		datas []stock.SparepartHistory
 		err   error
 	)
 
-	rows, err = d.stmt[getAllSparepartHistory].QueryxContext(ctx)
+	rows, err = d.stmt[getAllSparepartHistory].QueryxContext(ctx, id_teknisi, id_teknisi, id_mesin, id_mesin, id_sparepart, id_sparepart, offset, limit)
 	if err != nil {
 		return datas, errors.Wrap(err, "[DATA][GetAllSparepartHistory]")
 	}
@@ -32,6 +32,17 @@ func (d Data) GetAllSparepartHistory(ctx context.Context) ([]stock.SparepartHist
 	defer rows.Close()
 
 	return datas, nil
+}
+
+func (d Data) GetAllSparepartHistoryCount(ctx context.Context, id_teknisi, id_mesin, id_sparepart string) ([]stock.SparepartHistory, int, error) {
+	history := []stock.SparepartHistory{}
+	var count int
+
+	if err := d.stmt[getAllSparepartHistoryCount].QueryRowxContext(ctx, id_teknisi, id_teknisi, id_mesin, id_mesin, id_sparepart, id_sparepart).Scan(&count); err != nil {
+		return history, count, errors.Wrap(err, "[DATA][GetAllSparepartHistoryCount]")
+	}
+
+	return history, count, nil
 }
 
 func (d Data) GetSparepartHistoryByID(ctx context.Context, id string) ([]stock.SparepartHistory, error) {
@@ -65,7 +76,6 @@ func (d Data) CreateSparepartHistory(ctx context.Context, history stock.Sparepar
 		history.IDTeknisi,
 		history.IDMachine,
 		history.IDSparepart,
-		history.IDRequest,
 		history.Quantity,
 		history.Counter,
 		history.UpdatedBy,
@@ -82,7 +92,6 @@ func (d Data) UpdateSparepartHistory(ctx context.Context, history stock.Sparepar
 		history.IDTeknisi,
 		history.IDMachine,
 		history.IDSparepart,
-		history.IDRequest,
 		history.Quantity,
 		history.Counter,
 		history.UpdatedBy,

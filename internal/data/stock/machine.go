@@ -73,7 +73,6 @@ func (d Data) CreateMachine(ctx context.Context, machine stock.Machine) error {
 	_, err := d.stmt[createMachine].ExecContext(ctx,
 		machine.ID,
 		machine.Type,
-		machine.Counter,
 		machine.Customer,
 	)
 
@@ -85,7 +84,6 @@ func (d Data) CreateMachine(ctx context.Context, machine stock.Machine) error {
 
 func (d Data) UpdateMachine(ctx context.Context, machine stock.Machine) error {
 	_, err := d.stmt[updateMachine].ExecContext(ctx,
-		machine.Counter,
 		machine.Customer,
 		machine.ID,
 	)

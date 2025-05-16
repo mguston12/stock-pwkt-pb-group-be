@@ -16,7 +16,8 @@ type Data interface {
 	UpdateSparepart(ctx context.Context, sparepart stock.Sparepart) error
 	DeleteSparepart(ctx context.Context, id string) error
 
-	GetAllSparepartHistory(ctx context.Context) ([]stock.SparepartHistory, error)
+	GetAllSparepartHistory(ctx context.Context, id_teknisi, id_mesin, id_sparepart string, offset, limit int) ([]stock.SparepartHistory, error)
+	GetAllSparepartHistoryCount(ctx context.Context, id_teknisi, id_mesin, id_sparepart string) ([]stock.SparepartHistory, int, error)
 	GetSparepartHistoryByID(ctx context.Context, id string) ([]stock.SparepartHistory, error)
 	CreateSparepartHistory(ctx context.Context, history stock.SparepartHistory) error
 	UpdateSparepartHistory(ctx context.Context, history stock.SparepartHistory) error
@@ -54,6 +55,7 @@ type Data interface {
 
 	GetAllInventory(ctx context.Context) ([]stock.Inventory, error)
 	GetInventoryByID(ctx context.Context, id string) ([]stock.Inventory, error)
+	GetInventoryByIDInv(ctx context.Context, id string) (stock.Inventory, error)
 	CreateInventory(ctx context.Context, inventory stock.Inventory) error
 	UpdateInventory(ctx context.Context, inventory stock.Inventory) error
 	DeleteInventory(ctx context.Context, id_teknisi, id_sparepart string) error
@@ -64,6 +66,13 @@ type Data interface {
 	DeletePembelianSparepart(ctx context.Context, id string) error
 	GetAverageCostSparepart(ctx context.Context, id string) (float64, error)
 	GetSparepartCost(ctx context.Context, filter stock.SparepartCostFilter) ([]stock.SparepartCostResult, error)
+
+	GetSuppliers(ctx context.Context) ([]stock.Supplier, error)
+	GetSuppliersPage(ctx context.Context, nama string, offset, limit int) ([]stock.Supplier, error)
+	GetSuppliersCount(ctx context.Context, nama string) ([]stock.Supplier, int, error)
+	CreateSupplier(ctx context.Context, supplier stock.Supplier) error
+	UpdateSupplier(ctx context.Context, supplier stock.Supplier) error
+	DeleteSupplier(ctx context.Context, id string) error
 }
 
 // Service ...

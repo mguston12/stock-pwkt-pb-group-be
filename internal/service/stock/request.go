@@ -71,11 +71,10 @@ func (s Service) UpdateRequest(ctx context.Context, request stock.Request) error
 				IDTeknisi:   request.Teknisi,
 				IDMachine:   request.Mesin,
 				IDSparepart: request.Sparepart,
-				IDRequest:   request.ID,
 				Quantity:    request.Quantity,
 				// Request:     request.Counter,
-				UpdatedBy:   request.UpdatedBy,
-				UpdatedAt:   time.Now(),
+				UpdatedBy: request.UpdatedBy,
+				UpdatedAt: time.Now(),
 			}
 			err = s.data.CreateSparepartHistory(ctx, history)
 			if err != nil {

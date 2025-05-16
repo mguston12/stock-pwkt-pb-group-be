@@ -2,19 +2,61 @@ package stock
 
 import (
 	"context"
+	"math"
 	"stock/internal/entity/stock"
 	"stock/pkg/errors"
 )
 
 // GetAllSparepartHistory ...
-func (s Service) GetAllSparepartHistory(ctx context.Context) ([]stock.SparepartHistory, error) {
-	sparepartHistory, err := s.data.GetAllSparepartHistory(ctx)
+// func (s Service) GetAllSparepartHistory(ctx context.Context) ([]stock.SparepartHistory, error) {
+// 	sparepartHistory, err := s.data.GetAllSparepartHistory(ctx)
+// 	if err != nil {
+// 		return sparepartHistory, errors.Wrap(err, "[SERVICE][GetAllSparepartHistory]")
+// 	}
+
+// 	return sparepartHistory, nil
+// }
+
+func (s Service) GetAllSparepartHistory(ctx context.Context, id_teknisi, id_mesin, id_sparepart string, page, length int) ([]stock.SparepartHistory, int, error) {
+	limit := length
+	offset := (page - 1) * length
+	var lastPage int
+	details := []stock.SparepartHistory{}
+
+	histories, count, err := s.data.GetAllSparepartHistoryCount(ctx, id_teknisi, id_mesin, id_sparepart)
 	if err != nil {
-		return sparepartHistory, errors.Wrap(err, "[SERVICE][GetAllSparepartHistory]")
+		return histories, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFiltered][COUNT]")
+
 	}
 
-	return sparepartHistory, nil
+	lastPage = int(math.Ceil(float64(count) / float64(length)))
+
+	histories, err = s.data.GetAllSparepartHistory(ctx, id_teknisi, id_mesin, id_sparepart, offset, limit)
+	if err != nil {
+		return histories, lastPage, errors.Wrap(err, "[SERVICE][GetSparepartsFiltered]")
+	}
+
+	for _, k := range histories {
+		technician, err := s.data.GetTeknisiByID(ctx, k.IDTeknisi)
+		if err != nil {
+			return histories, lastPage, errors.Wrap(err, "[SERVICE][GetAllSparepartHistory]")
+		}
+
+		k.NamaTeknisi = technician.Nama
+
+		sparepart, err := s.data.GetSparepartByID(ctx, k.IDSparepart)
+		if err != nil {
+			return histories, lastPage, errors.Wrap(err, "[SERVICE][GetAllSparepartHistory]")
+		}
+
+		k.NamaSparepart = sparepart.Nama
+
+		details = append(details, k)
+	}
+
+	return details, lastPage, nil
 }
+
 func (s Service) GetSparepartHistoryByID(ctx context.Context, id string) ([]stock.SparepartHistory, error) {
 	details := []stock.SparepartHistory{}
 

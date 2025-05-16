@@ -18,13 +18,11 @@ func (h *Handler) GetSparepartCost(w http.ResponseWriter, r *http.Request) {
 	)
 	defer resp.RenderJSON(w, r)
 
-	// Menangani parameter query
 	idCustomer := r.FormValue("id_customer")
-	year := getIntQueryParam(r, "year")
-	month := getIntQueryParam(r, "month")
-	machineID := r.FormValue("machine_id") // Add this to get the machine_id from query
+	year := getIntQueryParam(r, "tahun")
+	month := getIntQueryParam(r, "bulan")
+	machineID := r.FormValue("machine_id")
 
-	// Set filter with the parameters
 	var filter stock.SparepartCostFilter
 	if idCustomer != "" {
 		filter.CustomerID = &idCustomer

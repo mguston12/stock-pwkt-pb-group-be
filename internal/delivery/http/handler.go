@@ -66,6 +66,7 @@ func (s *Server) Handler() *mux.Router {
 	inventory := r.PathPrefix("/inventory").Subrouter()
 	inventory.HandleFunc("", s.Stock.GetAllInventory).Methods("GET")
 	inventory.HandleFunc("/detail", s.Stock.GetInventoryByID).Methods("GET")
+	inventory.HandleFunc("/usage", s.Stock.InventoryUsage).Methods("POST")
 	inventory.HandleFunc("/create", s.Stock.CreateInventory).Methods("POST")
 	inventory.HandleFunc("/update", s.Stock.UpdateInventory).Methods("PUT")
 	inventory.HandleFunc("/delete", s.Stock.DeleteInventory).Methods("DELETE")
@@ -75,6 +76,16 @@ func (s *Server) Handler() *mux.Router {
 	pembeliansp.HandleFunc("/create", s.Stock.CreatePembelianSparepart).Methods("POST")
 	pembeliansp.HandleFunc("/update", s.Stock.UpdatePembelianSparepart).Methods("PUT")
 	pembeliansp.HandleFunc("/delete", s.Stock.DeletePembelianSparepart).Methods("DELETE")
+
+	history := r.PathPrefix("/histories").Subrouter()
+	history.HandleFunc("", s.Stock.GetAllSparepartHistory).Methods("GET")
+	history.HandleFunc("/", s.Stock.GetAllSparepartHistory).Methods("GET")
+
+	suppliers := r.PathPrefix("/suppliers").Subrouter()
+	suppliers.HandleFunc("", s.Stock.GetSuppliersPagination).Methods("GET")
+	suppliers.HandleFunc("/create", s.Stock.CreateSupplier).Methods("POST")
+	suppliers.HandleFunc("/update", s.Stock.UpdateSupplier).Methods("PUT")
+	suppliers.HandleFunc("/delete", s.Stock.DeleteSupplier).Methods("DELETE")
 
 	return r
 }

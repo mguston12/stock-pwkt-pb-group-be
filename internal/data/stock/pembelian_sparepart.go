@@ -49,6 +49,7 @@ func (d Data) CreatePembelianSparepart(ctx context.Context, pembelian_sp stock.P
 		pembelian_sp.Sparepart,
 		pembelian_sp.Quantity,
 		pembelian_sp.HargaPerUnit,
+		pembelian_sp.Supplier,
 	)
 
 	if err != nil {

@@ -46,7 +46,6 @@ type SparepartHistory struct {
 	IDMachine     string    `db:"id_machine" json:"id_machine"`
 	IDSparepart   string    `db:"id_sparepart" json:"id_sparepart"`
 	NamaSparepart string    `json:"nama_sparepart"`
-	IDRequest     int       `db:"id_request" json:"id_request"`
 	Quantity      int       `db:"quantity" json:"quantity"`
 	Counter       int       `db:"counter" json:"counter"`
 	UpdatedBy     string    `db:"updated_by" json:"updated_by"`
@@ -78,6 +77,15 @@ type PembelianSparepart struct {
 	TanggalPembelian time.Time `db:"tanggal_pembelian" json:"tanggal_pembelian"`
 	Quantity         int       `db:"quantity" json:"quantity"`
 	HargaPerUnit     float64   `db:"harga_per_unit" json:"harga_per_unit"`
+	Supplier         int       `db:"id_supplier" json:"id_supplier"`
+	NamaSupplier     string    `db:"nama_supplier" json:"nama_supplier"`
+}
+
+type InventoryUsage struct {
+	InventoryID string `json:"id_inventory"`
+	MachineID   string `json:"id_machine"`
+	Counter     int    `json:"counter"`
+	UpdatedBy   string `json:"updated_by"`
 }
 
 type SparepartCostFilter struct {
@@ -99,6 +107,11 @@ type SparepartCostResult struct {
 type User struct {
 	Username string `db:"username" json:"username"`
 	Password string `db:"password" json:"password"`
+}
+
+type Supplier struct {
+	ID   int    `db:"id_supplier" json:"id_supplier"`
+	Nama string `db:"nama_supplier" json:"nama_supplier"`
 }
 
 type LoginResponse struct {

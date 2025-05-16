@@ -57,6 +57,31 @@ func (h *Handler) GetInventoryByID(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
 }
 
+func (h *Handler) InventoryUsage(w http.ResponseWriter, r *http.Request) {
+	resp := response.Response{}
+	defer resp.RenderJSON(w, r)
+
+	ctx := r.Context()
+
+	input := stock.InventoryUsage{}
+
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	err = h.stockSvc.InventoryUsage(ctx, input)
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
+}
+
 func (h *Handler) CreateInventory(w http.ResponseWriter, r *http.Request) {
 	resp := response.Response{}
 	defer resp.RenderJSON(w, r)

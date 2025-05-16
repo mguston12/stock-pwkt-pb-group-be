@@ -59,6 +59,16 @@ func (d Data) GetInventoryByID(ctx context.Context, id string) ([]stock.Inventor
 	return datas, nil
 }
 
+func (d Data) GetInventoryByIDInv(ctx context.Context, id string) (stock.Inventory, error) {
+	inventory := stock.Inventory{}
+
+	if err := d.stmt[getInventoryByIDInv].QueryRowxContext(ctx, id).StructScan(&inventory); err != nil {
+		return inventory, errors.Wrap(err, "[DATA][GetInventoryByIDInv]")
+	}
+
+	return inventory, nil
+}
+
 func (d Data) CreateInventory(ctx context.Context, inventory stock.Inventory) error {
 	_, err := d.stmt[createInventory].ExecContext(ctx,
 		inventory.Teknisi,

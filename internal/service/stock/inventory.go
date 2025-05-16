@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"log"
 	"stock/internal/entity/stock"
 	"stock/pkg/errors"
 )
@@ -39,6 +40,43 @@ func (s Service) UpdateInventory(ctx context.Context, inventory stock.Inventory)
 		return errors.Wrap(err, "[SERVICE][UpdateInventory]")
 	}
 
+	return nil
+}
+
+func (s Service) InventoryUsage(ctx context.Context, input stock.InventoryUsage) error {
+	inventory, err := s.data.GetInventoryByIDInv(ctx, input.InventoryID)
+	if err != nil {
+		return errors.Wrap(err, "[SERVICE][InventoryUsage][1]")
+	}
+
+	inv := stock.Inventory{
+		ID:            input.InventoryID,
+		Teknisi:       input.UpdatedBy,
+		Sparepart:     inventory.Sparepart,
+		NamaSparepart: inventory.NamaSparepart,
+		Quantity:      inventory.Quantity - 1,
+	}
+
+	log.Println(inv)
+
+	err = s.data.UpdateInventory(ctx, inv)
+	if err != nil {
+		return errors.Wrap(err, "[SERVICE][InventoryUsage][2]")
+	}
+
+	history := stock.SparepartHistory{
+		IDTeknisi:   input.UpdatedBy,
+		IDMachine:   input.MachineID,
+		IDSparepart: inventory.Sparepart,
+		Quantity:    1,
+		Counter:     input.Counter,
+		UpdatedBy:   input.UpdatedBy,
+	}
+
+	err = s.data.CreateSparepartHistory(ctx, history)
+	if err != nil {
+		return errors.Wrap(err, "[SERVICE][InventoryUsage][3]")
+	}
 	return nil
 }
 
