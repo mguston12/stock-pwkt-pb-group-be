@@ -178,6 +178,9 @@ const (
 	deleteRequest  = "DeleteRequest"
 	qDeleteRequest = "DELETE FROM request WHERE id_request = ?"
 
+	deleteRequestByIDSparepart  = "DeleteRequestByIDSparepart"
+	qDeleteRequestByIDSparepart = "DELETE FROM request WHERE id_sparepart = ?"
+
 	// Customer
 	getAllCustomers  = "GetAllCustomers"
 	qGetAllCustomers = `SELECT * FROM customer`
@@ -201,7 +204,7 @@ const (
 
 	//User
 	getUserByUsername  = "GetUserByUsername"
-	qGetUserByUsername = "SELECT * FROM user WHERE username = ?"
+	qGetUserByUsername = "SELECT * FROM user WHERE BINARY username = ?"
 
 	createUser  = "CreateUser"
 	qCreateUser = `INSERT INTO user(username, password) VALUES (?,?)`
@@ -248,8 +251,12 @@ const (
 
 	//Pembelian Sparepart
 	getPembelianSparepart  = "GetPembelianSparepart"
-	qGetPembelianSparepart = `SELECT * FROM pembelian_sparepart ps 
+	qGetPembelianSparepart = `SELECT ps.*, s.nama_supplier FROM pembelian_sparepart ps 
 							JOIN supplier s ON ps.id_supplier = s.id_supplier`
+
+	getPembelianSparepartByID  = "GetPembelianSparepartByID"
+	qGetPembelianSparepartByID = `SELECT ps.*, s.nama_supplier FROM pembelian_sparepart ps 
+							JOIN supplier s ON ps.id_supplier = s.id_supplier WHERE id_sparepart = ?`
 
 	createPembelianSparepart  = "CreatePembelianSparepart"
 	qCreatePembelianSparepart = `INSERT INTO pembelian_sparepart(id_sparepart, quantity, harga_per_unit, id_supplier) 
@@ -266,6 +273,9 @@ const (
 	deletePembelianSparepart  = "DeletePembelianSparepart"
 	qDeletePembelianSparepart = `DELETE from pembelian_sparepart WHERE id_pembelian = ?`
 
+	deletePembelianSparepartByIDSparepart  = "DeletePembelianSparepartByIDSparepart"
+	qDeletePembelianSparepartByIDSparepart = `DELETE from pembelian_sparepart WHERE id_sparepart = ?`
+
 	getAverageCostSparepart  = "GetAverageCostSparepart"
 	qGetAverageCostSparepart = `SELECT COALESCE(SUM(quantity * harga_per_unit) / NULLIF(SUM(quantity), 0), 0) AS average_cost
 								FROM pembelian_sparepart WHERE id_sparepart = ?`
@@ -277,10 +287,10 @@ const (
 	qGetSuppliersPage = `SELECT * FROM supplier WHERE nama_supplier LIKE ? OR ? = '' LIMIT ?, ?`
 
 	getSuppliersCount  = "GetSuppliersCount"
-	qGetSuppliersCount = `SELECT COUNT(*) FROM sparepart WHERE nama_sparepart LIKE ? OR ? = ''`
+	qGetSuppliersCount = `SELECT COUNT(*) FROM supplier WHERE nama_supplier LIKE ? OR ? = ''`
 
 	createSupplier  = "CreateSupplier"
-	qCreateSupplier = `INSERT INTO supplier(id_supplier, nama_supplier) VALUES (?,?)`
+	qCreateSupplier = `INSERT INTO supplier(nama_supplier) VALUES (?)`
 
 	updateSupplier  = "UpdateSupplier"
 	qUpdateSupplier = `UPDATE supplier
@@ -291,6 +301,28 @@ const (
 
 	deleteSupplier  = "DeleteSupplier"
 	qDeleteSupplier = `DELETE FROM supplier WHERE id_supplier = ?`
+
+	getAllReturnInventory  = "GetAllReturnInventory"
+	qGetAllReturnInventory = `SELECT ri.*, sp.nama_sparepart, t.nama_teknisi 
+							FROM return_inventory ri
+							LEFT JOIN sparepart sp ON ri.id_sparepart = sp.id_sparepart
+							JOIN teknisi t ON ri.returned_by = t.id_teknisi
+							ORDER BY returned_at DESC`
+
+	getReturnInventoryByStatus  = "GetReturnInventoryByStatus"
+	qGetReturnInventoryByStatus = `SELECT ri.*, sp.nama_sparepart 
+								FROM return_inventory ri
+								LEFT JOIN sparepart sp ON ri.id_sparepart = sp.id_sparepart
+								WHERE ri.status = ?
+								ORDER BY returned_at DESC`
+
+	createReturnInventory  = "CreateReturnInventory"
+	qCreateReturnInventory = `INSERT INTO return_inventory(id_inventory, id_sparepart, quantity, returned_by) VALUES (?, ?, ?, ?)`
+
+	approveReturnInventory  = "ApproveReturnInventory"
+	qApproveReturnInventory = `UPDATE return_inventory
+							SET status = ?, approved_by = ?, approved_at = NOW()
+							WHERE id_return = ?`
 )
 
 var (
@@ -325,11 +357,15 @@ var (
 		{getInventoryByIDInv, qGetInventoryByIDInv},
 		//pembelian sparepart
 		{getPembelianSparepart, qGetPembelianSparepart},
+		{getPembelianSparepartByID, qGetPembelianSparepartByID},
 		{getAverageCostSparepart, qGetAverageCostSparepart},
 		//supplier
 		{getSuppliers, qGetSuppliers},
 		{getSuppliersPage, qGetSuppliersPage},
 		{getSuppliersCount, qGetSuppliersCount},
+		//return sparepart
+		{getAllReturnInventory, qGetAllReturnInventory},
+		{getReturnInventoryByStatus, qGetReturnInventoryByStatus},
 	}
 	insertStmt = []statement{
 		{createSparepart, qCreateSparepart},
@@ -342,6 +378,7 @@ var (
 		{createInventory, qCreateInventory},
 		{createPembelianSparepart, qCreatePembelianSparepart},
 		{createSupplier, qCreateSupplier},
+		{createReturnInventory, qCreateReturnInventory},
 	}
 	updateStmt = []statement{
 		{updateSparepart, qUpdateSparepart},
@@ -354,6 +391,7 @@ var (
 		{updateInventory, qUpdateInventory},
 		{updatePembelianSparepart, qUpdatePembelianSparepart},
 		{updateSupplier, qUpdateSupplier},
+		{approveReturnInventory, qApproveReturnInventory},
 	}
 	deleteStmt = []statement{
 		{deleteSparepart, qDeleteSparepart},
@@ -361,10 +399,12 @@ var (
 		{deleteTeknisi, qDeleteTeknisi},
 		{deleteMachine, qDeleteMachine},
 		{deleteRequest, qDeleteRequest},
+		{deleteRequestByIDSparepart, qDeleteRequestByIDSparepart},
 		{deleteCustomer, qDeleteCustomer},
 		{deleteUser, qDeleteUser},
 		{deleteInventory, qDeleteInventory},
 		{deletePembelianSparepart, qDeletePembelianSparepart},
+		{deletePembelianSparepartByIDSparepart, qDeletePembelianSparepartByIDSparepart},
 		{deleteSupplier, qDeleteSupplier},
 	}
 )

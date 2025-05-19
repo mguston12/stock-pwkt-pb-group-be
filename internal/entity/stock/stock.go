@@ -63,7 +63,7 @@ type Customer struct {
 }
 
 type Inventory struct {
-	ID            string    `db:"id_inventory" json:"id_inventory"`
+	ID            int       `db:"id_inventory" json:"id_inventory"`
 	Teknisi       string    `db:"id_teknisi" json:"id_teknisi"`
 	Sparepart     string    `db:"id_sparepart" json:"id_sparepart"`
 	NamaSparepart string    `db:"nama_sparepart" json:"nama_sparepart"`
@@ -81,8 +81,22 @@ type PembelianSparepart struct {
 	NamaSupplier     string    `db:"nama_supplier" json:"nama_supplier"`
 }
 
+type ReturnInventory struct {
+	IDReturn      int        `db:"id_return" json:"id_return"`
+	IDInventory   int        `db:"id_inventory" json:"id_inventory"`
+	IDSparepart   string     `db:"id_sparepart" json:"id_sparepart"`
+	Teknisi       string     `db:"nama_teknisi" json:"nama_teknisi"`
+	Quantity      int        `db:"quantity" json:"quantity"`
+	ReturnedBy    string     `db:"returned_by" json:"returned_by"`
+	ReturnedAt    time.Time  `db:"returned_at" json:"returned_at"`
+	Status        string     `db:"status" json:"status"`
+	ApprovedBy    *string    `db:"approved_by" json:"approved_by"`
+	ApprovedAt    *time.Time `db:"approved_at" json:"approved_at"`
+	NamaSparepart string     `db:"nama_sparepart" json:"nama_sparepart"`
+}
+
 type InventoryUsage struct {
-	InventoryID string `json:"id_inventory"`
+	InventoryID int    `json:"id_inventory"`
 	MachineID   string `json:"id_machine"`
 	Counter     int    `json:"counter"`
 	UpdatedBy   string `json:"updated_by"`

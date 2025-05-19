@@ -73,6 +73,7 @@ func (s *Server) Handler() *mux.Router {
 
 	pembeliansp := r.PathPrefix("/purchase").Subrouter()
 	pembeliansp.HandleFunc("", s.Stock.GetPembelianSparepart).Methods("GET")
+	pembeliansp.HandleFunc("/{id}", s.Stock.GetPembelianSparepartByID).Methods("GET")
 	pembeliansp.HandleFunc("/create", s.Stock.CreatePembelianSparepart).Methods("POST")
 	pembeliansp.HandleFunc("/update", s.Stock.UpdatePembelianSparepart).Methods("PUT")
 	pembeliansp.HandleFunc("/delete", s.Stock.DeletePembelianSparepart).Methods("DELETE")
@@ -86,6 +87,12 @@ func (s *Server) Handler() *mux.Router {
 	suppliers.HandleFunc("/create", s.Stock.CreateSupplier).Methods("POST")
 	suppliers.HandleFunc("/update", s.Stock.UpdateSupplier).Methods("PUT")
 	suppliers.HandleFunc("/delete", s.Stock.DeleteSupplier).Methods("DELETE")
+
+	returnInv := r.PathPrefix("/return-inventory").Subrouter()
+	returnInv.HandleFunc("", s.Stock.GetAllReturnInventory).Methods("GET")
+	returnInv.HandleFunc("/status", s.Stock.GetReturnInventoryByStatus).Methods("GET")
+	returnInv.HandleFunc("/return", s.Stock.ProcessReturnSparepart).Methods("POST")
+	returnInv.HandleFunc("/approve", s.Stock.ApproveReturnInventory).Methods("POST")
 
 	return r
 }

@@ -98,9 +98,30 @@ func (s Service) UpdateSparepart(ctx context.Context, sparepart stock.Sparepart)
 }
 
 func (s Service) DeleteSparepart(ctx context.Context, id string) error {
-	err := s.data.DeleteSparepart(ctx, id)
+	count, err := s.data.CheckSparepartValidOrNot(ctx, id)
 	if err != nil {
-		return errors.Wrap(err, "[SERVICE][DeleteSparepart]")
+		return errors.Wrap(err, "[SERVICE][DeleteSparepart][1]")
+	}
+
+	if count == 0 {
+		err = s.data.DeletePembelianSparepartByIDSparepart(ctx, id)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][DeleteSparepart][2]")
+		}
+
+		err = s.data.DeleteRequestByIDSparepart(ctx, id)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][DeleteSparepart][3]")
+		}
+
+		err = s.data.DeleteSparepart(ctx, id)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][DeleteSparepart][4]")
+		}
+
+	} else {
+		return errors.New("Sparepart tidak bisa dihapus karena sudah digunakan dalam request yang disetujui")
+
 	}
 
 	return nil

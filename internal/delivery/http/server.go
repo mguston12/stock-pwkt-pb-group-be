@@ -55,6 +55,7 @@ type StockHandler interface {
 	DeleteInventory(w http.ResponseWriter, r *http.Request)
 
 	GetPembelianSparepart(w http.ResponseWriter, r *http.Request)
+	GetPembelianSparepartByID(w http.ResponseWriter, r *http.Request)
 	CreatePembelianSparepart(w http.ResponseWriter, r *http.Request)
 	UpdatePembelianSparepart(w http.ResponseWriter, r *http.Request)
 	DeletePembelianSparepart(w http.ResponseWriter, r *http.Request)
@@ -66,6 +67,11 @@ type StockHandler interface {
 	CreateSupplier(w http.ResponseWriter, r *http.Request)
 	UpdateSupplier(w http.ResponseWriter, r *http.Request)
 	DeleteSupplier(w http.ResponseWriter, r *http.Request)
+
+	GetAllReturnInventory(w http.ResponseWriter, r *http.Request)
+	GetReturnInventoryByStatus(w http.ResponseWriter, r *http.Request)
+	ProcessReturnSparepart(w http.ResponseWriter, r *http.Request)
+	ApproveReturnInventory(w http.ResponseWriter, r *http.Request)
 }
 
 // Server ...

@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"log"
 	"stock/internal/entity/stock"
 
 	"stock/pkg/errors"
@@ -105,4 +106,34 @@ func (d Data) DeleteRequest(ctx context.Context, id string) error {
 		return errors.Wrap(err, "[DATA][DeleteRequest]")
 	}
 	return nil
+}
+
+func (d Data) DeleteRequestByIDSparepart(ctx context.Context, id string) error {
+	result, err := d.stmt[deleteRequestByIDSparepart].ExecContext(ctx, id)
+	if err != nil {
+		return errors.Wrap(err, "[DATA][DeleteRequestByIDSparepart]")
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return errors.Wrap(err, "[DATA][DeleteRequestByIDSparepart][RowsAffected]")
+	}
+
+	if rowsAffected == 0 {
+		log.Printf("[INFO] Tidak ada pembelian sparepart dengan id %s untuk dihapus", id)
+	}
+
+	return nil
+}
+
+func (d Data) CheckSparepartValidOrNot(ctx context.Context, id string) (int, error) {
+	var count int
+
+	query := `SELECT COUNT(*) from stock.request WHERE id_sparepart = ? AND status_request = "Disetujui";`
+
+	if err := d.db.QueryRowxContext(ctx, query, id).Scan(&count); err != nil {
+		return count, errors.Wrap(err, "[DATA][CheckSparepartValidOrNot]")
+	}
+
+	return count, nil
 }

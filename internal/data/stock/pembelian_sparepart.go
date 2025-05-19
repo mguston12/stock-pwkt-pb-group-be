@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"log"
 	"stock/internal/entity/stock"
 
 	"stock/pkg/errors"
@@ -26,6 +27,31 @@ func (d Data) GetPembelianSparepart(ctx context.Context) ([]stock.PembelianSpare
 		err := rows.StructScan(&data)
 		if err != nil {
 			return datas, errors.Wrap(err, "[DATA][GetPembelianSparepart]")
+		}
+		datas = append(datas, data)
+	}
+	defer rows.Close()
+
+	return datas, nil
+}
+
+func (d Data) GetPembelianSparepartByID(ctx context.Context, id string) ([]stock.PembelianSparepart, error) {
+	var (
+		rows  *sqlx.Rows
+		datas []stock.PembelianSparepart
+		err   error
+	)
+
+	rows, err = d.stmt[getPembelianSparepartByID].QueryxContext(ctx, id)
+	if err != nil {
+		return datas, errors.Wrap(err, "[DATA][GetPembelianSparepartByID]")
+	}
+
+	for rows.Next() {
+		var data stock.PembelianSparepart
+		err := rows.StructScan(&data)
+		if err != nil {
+			return datas, errors.Wrap(err, "[DATA][GetPembelianSparepartByID]")
 		}
 		datas = append(datas, data)
 	}
@@ -72,10 +98,37 @@ func (d Data) UpdatePembelianSparepart(ctx context.Context, pembelian_sp stock.P
 }
 
 func (d Data) DeletePembelianSparepart(ctx context.Context, id string) error {
-	_, err := d.stmt[deletePembelianSparepart].ExecContext(ctx, id)
-
+	result, err := d.stmt[deletePembelianSparepart].ExecContext(ctx, id)
 	if err != nil {
 		return errors.Wrap(err, "[DATA][DeletePembelianSparepart]")
 	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return errors.Wrap(err, "[DATA][DeletePembelianSparepart][RowsAffected]")
+	}
+
+	if rowsAffected == 0 {
+		log.Printf("[INFO] Tidak ada pembelian sparepart dengan id %s untuk dihapus", id)
+	}
+
+	return nil
+}
+
+func (d Data) DeletePembelianSparepartByIDSparepart(ctx context.Context, id string) error {
+	result, err := d.stmt[deletePembelianSparepartByIDSparepart].ExecContext(ctx, id)
+	if err != nil {
+		return errors.Wrap(err, "[DATA][DeletePembelianSparepartByIDSparepart]")
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return errors.Wrap(err, "[DATA][DeletePembelianSparepartByIDSparepart][RowsAffected]")
+	}
+
+	if rowsAffected == 0 {
+		log.Printf("[INFO] Tidak ada pembelian sparepart dengan id %s untuk dihapus", id)
+	}
+
 	return nil
 }

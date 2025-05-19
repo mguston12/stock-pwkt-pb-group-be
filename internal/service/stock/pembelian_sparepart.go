@@ -15,6 +15,15 @@ func (s Service) GetPembelianSparepart(ctx context.Context) ([]stock.PembelianSp
 	return pembelian_sp, nil
 }
 
+func (s Service) GetPembelianSparepartByID(ctx context.Context, id string) ([]stock.PembelianSparepart, error) {
+	pembelian_sp, err := s.data.GetPembelianSparepartByID(ctx, id)
+	if err != nil {
+		return pembelian_sp, errors.Wrap(err, "[SERVICE][GetPembelianSparepartByID]")
+	}
+
+	return pembelian_sp, nil
+}
+
 func (s Service) CreatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error {
 	err := s.data.CreatePembelianSparepart(ctx, pembelian_sp)
 	if err != nil {

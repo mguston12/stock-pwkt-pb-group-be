@@ -28,7 +28,7 @@ func (s Service) GetUserByUsername(ctx context.Context, username string) (stock.
 func (s Service) MatchPassword(ctx context.Context, login stock.User) error {
 	user, err := s.GetUserByUsername(ctx, login.Username)
 	if err != nil {
-		return errors.New("Data tidak ada")
+		return errors.New("Username tidak ditemukan.")
 	}
 
 	if user.Password == "p4ssw0rd" {

@@ -52,6 +52,7 @@ type StockSvc interface {
 	DeleteInventory(ctx context.Context, id_teknisi, id_sparepart string) error
 
 	GetPembelianSparepart(ctx context.Context) ([]stock.PembelianSparepart, error)
+	GetPembelianSparepartByID(ctx context.Context, id string) ([]stock.PembelianSparepart, error)
 	CreatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error
 	UpdatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error
 	DeletePembelianSparepart(ctx context.Context, id string) error
@@ -62,6 +63,11 @@ type StockSvc interface {
 	CreateSupplier(ctx context.Context, supplier stock.Supplier) error
 	UpdateSupplier(ctx context.Context, supplier stock.Supplier) error
 	DeleteSupplier(ctx context.Context, id string) error
+
+	GetAllReturnInventory(ctx context.Context) ([]stock.ReturnInventory, error)
+	GetReturnInventoryByStatus(ctx context.Context, status string) ([]stock.ReturnInventory, error)
+	ProcessReturnSparepart(ctx context.Context, input stock.ReturnInventory) error
+	ApproveReturnInventory(ctx context.Context, input stock.ReturnInventory) error
 }
 
 type Handler struct {

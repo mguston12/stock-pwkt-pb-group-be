@@ -47,6 +47,7 @@ type Data interface {
 	CreateRequest(ctx context.Context, request stock.Request) error
 	UpdateRequest(ctx context.Context, request stock.Request) error
 	DeleteRequest(ctx context.Context, id string) error
+	DeleteRequestByIDSparepart(ctx context.Context, id string) error
 
 	GetUserByUsername(ctx context.Context, username string) (stock.User, error)
 	CreateUser(ctx context.Context, user stock.User) error
@@ -55,15 +56,17 @@ type Data interface {
 
 	GetAllInventory(ctx context.Context) ([]stock.Inventory, error)
 	GetInventoryByID(ctx context.Context, id string) ([]stock.Inventory, error)
-	GetInventoryByIDInv(ctx context.Context, id string) (stock.Inventory, error)
+	GetInventoryByIDInv(ctx context.Context, id int) (stock.Inventory, error)
 	CreateInventory(ctx context.Context, inventory stock.Inventory) error
 	UpdateInventory(ctx context.Context, inventory stock.Inventory) error
 	DeleteInventory(ctx context.Context, id_teknisi, id_sparepart string) error
 
 	GetPembelianSparepart(ctx context.Context) ([]stock.PembelianSparepart, error)
+	GetPembelianSparepartByID(ctx context.Context, id string) ([]stock.PembelianSparepart, error)
 	CreatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error
 	UpdatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error
 	DeletePembelianSparepart(ctx context.Context, id string) error
+	DeletePembelianSparepartByIDSparepart(ctx context.Context, id string) error
 	GetAverageCostSparepart(ctx context.Context, id string) (float64, error)
 	GetSparepartCost(ctx context.Context, filter stock.SparepartCostFilter) ([]stock.SparepartCostResult, error)
 
@@ -73,6 +76,13 @@ type Data interface {
 	CreateSupplier(ctx context.Context, supplier stock.Supplier) error
 	UpdateSupplier(ctx context.Context, supplier stock.Supplier) error
 	DeleteSupplier(ctx context.Context, id string) error
+
+	CheckSparepartValidOrNot(ctx context.Context, id string) (int, error)
+
+	GetAllReturnInventory(ctx context.Context) ([]stock.ReturnInventory, error)
+	GetReturnInventoryByStatus(ctx context.Context, status string) ([]stock.ReturnInventory, error)
+	CreateReturnInventory(ctx context.Context, input stock.ReturnInventory) error
+	ApproveReturnInventory(ctx context.Context, input stock.ReturnInventory) error
 }
 
 // Service ...
