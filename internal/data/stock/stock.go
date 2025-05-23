@@ -117,13 +117,13 @@ const (
 
 	//Mesin
 	getAllMachines  = "GetAllMachines"
-	qGetAllMachines = `SELECT * FROM machine`
+	qGetAllMachines = `SELECT id_machine, tipe_machine, COALESCE(id_customer, 'N/A') AS id_customer FROM machine`
 
 	getMachineByID  = "GetMachineByID"
-	qGetMachineByID = `SELECT * FROM machine WHERE id_machine = ?`
+	qGetMachineByID = `SELECT id_machine, tipe_machine, COALESCE(id_customer, 'N/A') AS id_customer FROM machine WHERE id_machine = ?`
 
 	getMachineByIDCustomer  = "GetMachineByIDCustomer"
-	qGetMachineByIDCustomer = `SELECT * FROM machine WHERE id_customer = ?`
+	qGetMachineByIDCustomer = `SELECT id_machine, tipe_machine, COALESCE(id_customer, 'N/A') AS id_customer FROM machine WHERE id_customer = ?`
 
 	createMachine  = "CreateMachine"
 	qCreateMachine = `INSERT INTO machine(id_machine, tipe_machine, id_customer) VALUES (?,?,?)`
@@ -331,6 +331,49 @@ const (
 	qApproveReturnInventory = `UPDATE return_inventory
 							SET status = ?, approved_by = ?, approved_at = NOW()
 							WHERE id_return = ?`
+
+	// Machine History
+	getAllMachineHistory  = "GetAllMachineHistory"
+	qGetAllMachineHistory = `SELECT * FROM machine_history 
+                         WHERE 
+                           (id_machine LIKE ? OR ? = '') AND 
+                           (id_customer LIKE ? OR ? = '') 
+                         ORDER BY tanggal_mulai DESC 
+                         LIMIT ?, ?`
+
+	getAllMachineHistoryCount  = "GetAllMachineHistoryCount"
+	qGetAllMachineHistoryCount = `SELECT COUNT(*) FROM machine_history 
+                              WHERE 
+                                (id_machine LIKE ? OR ? = '') AND 
+                                (id_customer LIKE ? OR ? = '')`
+
+	getMachineHistoryByID  = "GetMachineHistoryByID"
+	qGetMachineHistoryByID = `SELECT * FROM machine_history 
+                          WHERE id_machine = ? 
+                          ORDER BY tanggal_mulai DESC`
+
+	getLastMachineHistoryByMachineID  = "GetLastMachineHistoryByMachineID"
+	qGetLastMachineHistoryByMachineID = `SELECT id_history, id_machine, id_customer, status, tanggal_mulai, tanggal_selesai
+										FROM machine_history
+										WHERE id_machine = ? AND tanggal_mulai <= NOW()
+										ORDER BY tanggal_mulai DESC
+										LIMIT 1`
+
+	createMachineHistory  = "CreateMachineHistory"
+	qCreateMachineHistory = `INSERT INTO machine_history(id_machine, id_customer, tanggal_mulai, status) 
+                         VALUES (?, ?, ?, ?)`
+
+	updateMachineHistory  = "UpdateMachineHistory"
+	qUpdateMachineHistory = `UPDATE machine_history 
+                         SET 
+                           id_customer = COALESCE(NULLIF(?,''), id_customer),
+                           tanggal_mulai = COALESCE(NULLIF(?,''), tanggal_mulai),
+                           tanggal_selesai = COALESCE(NULLIF(?,''), tanggal_selesai),
+                           status = COALESCE(NULLIF(?,''), status)
+                         WHERE id_history = ?`
+
+	deleteMachineHistory  = "DeleteMachineHistory"
+	qDeleteMachineHistory = `DELETE FROM machine_history WHERE id_history = ?`
 )
 
 var (
@@ -375,6 +418,11 @@ var (
 		//return sparepart
 		{getAllReturnInventory, qGetAllReturnInventory},
 		{getReturnInventoryByStatus, qGetReturnInventoryByStatus},
+		//machine history
+		{getAllMachineHistory, qGetAllMachineHistory},
+		{getAllMachineHistoryCount, qGetAllMachineHistoryCount},
+		{getMachineHistoryByID, qGetMachineHistoryByID},
+		{getLastMachineHistoryByMachineID, qGetLastMachineHistoryByMachineID},
 	}
 	insertStmt = []statement{
 		{createSparepart, qCreateSparepart},
@@ -388,6 +436,7 @@ var (
 		{createPembelianSparepart, qCreatePembelianSparepart},
 		{createSupplier, qCreateSupplier},
 		{createReturnInventory, qCreateReturnInventory},
+		{createMachineHistory, qCreateMachineHistory},
 	}
 	updateStmt = []statement{
 		{updateSparepart, qUpdateSparepart},
@@ -401,6 +450,7 @@ var (
 		{updatePembelianSparepart, qUpdatePembelianSparepart},
 		{updateSupplier, qUpdateSupplier},
 		{approveReturnInventory, qApproveReturnInventory},
+		{updateMachineHistory, qUpdateMachineHistory},
 	}
 	deleteStmt = []statement{
 		{deleteSparepart, qDeleteSparepart},
@@ -415,6 +465,7 @@ var (
 		{deletePembelianSparepart, qDeletePembelianSparepart},
 		{deletePembelianSparepartByIDSparepart, qDeletePembelianSparepartByIDSparepart},
 		{deleteSupplier, qDeleteSupplier},
+		{deleteMachineHistory, qDeleteMachineHistory},
 	}
 )
 

@@ -28,6 +28,8 @@ type StockHandler interface {
 	CreateMachine(w http.ResponseWriter, r *http.Request)
 	UpdateMachine(w http.ResponseWriter, r *http.Request)
 	DeleteMachine(w http.ResponseWriter, r *http.Request)
+	ReplaceCustomerMachine(w http.ResponseWriter, r *http.Request)
+	DeactivateMachine(w http.ResponseWriter, r *http.Request)
 
 	GetAllCustomers(w http.ResponseWriter, r *http.Request)
 	CreateCustomer(w http.ResponseWriter, r *http.Request)
@@ -73,6 +75,12 @@ type StockHandler interface {
 	GetReturnInventoryByStatus(w http.ResponseWriter, r *http.Request)
 	ProcessReturnSparepart(w http.ResponseWriter, r *http.Request)
 	ApproveReturnInventory(w http.ResponseWriter, r *http.Request)
+
+	GetAllMachineHistories(w http.ResponseWriter, r *http.Request)
+	GetMachineHistoryByID(w http.ResponseWriter, r *http.Request)
+	CreateMachineHistory(w http.ResponseWriter, r *http.Request)
+	UpdateMachineHistory(w http.ResponseWriter, r *http.Request)
+	DeleteMachineHistory(w http.ResponseWriter, r *http.Request)
 }
 
 // Server ...

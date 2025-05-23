@@ -41,6 +41,8 @@ func (s *Server) Handler() *mux.Router {
 	machine.HandleFunc("/customer", s.Stock.GetMachineByIDCustomer).Methods("GET")
 	machine.HandleFunc("/detail", s.Stock.GetMachineByID).Methods("GET")
 	machine.HandleFunc("/create", s.Stock.CreateMachine).Methods("POST")
+	machine.HandleFunc("/replace", s.Stock.ReplaceCustomerMachine).Methods("POST")
+	machine.HandleFunc("/deactivate", s.Stock.DeactivateMachine).Methods("POST")
 	machine.HandleFunc("/update", s.Stock.UpdateMachine).Methods("PUT")
 	machine.HandleFunc("/delete", s.Stock.DeleteMachine).Methods("DELETE")
 
@@ -94,6 +96,13 @@ func (s *Server) Handler() *mux.Router {
 	returnInv.HandleFunc("/status", s.Stock.GetReturnInventoryByStatus).Methods("GET")
 	returnInv.HandleFunc("/return", s.Stock.ProcessReturnSparepart).Methods("POST")
 	returnInv.HandleFunc("/approve", s.Stock.ApproveReturnInventory).Methods("POST")
+
+	machine_history := r.PathPrefix("/machine-history").Subrouter()
+	machine_history.HandleFunc("", s.Stock.GetAllMachineHistories).Methods("GET")
+	machine_history.HandleFunc("/detail", s.Stock.GetMachineHistoryByID).Methods("GET")
+	machine_history.HandleFunc("/create", s.Stock.CreateMachineHistory).Methods("POST")
+	machine_history.HandleFunc("/update", s.Stock.UpdateMachineHistory).Methods("PUT")
+	machine_history.HandleFunc("/delete", s.Stock.DeleteMachineHistory).Methods("DELETE")
 
 	return r
 }

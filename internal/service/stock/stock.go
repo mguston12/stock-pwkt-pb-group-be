@@ -84,6 +84,14 @@ type Data interface {
 	GetReturnInventoryByStatus(ctx context.Context, status string) ([]stock.ReturnInventory, error)
 	CreateReturnInventory(ctx context.Context, input stock.ReturnInventory) error
 	ApproveReturnInventory(ctx context.Context, input stock.ReturnInventory) error
+
+	GetAllMachineHistory(ctx context.Context, idMachine, idCustomer string, offset, limit int) ([]stock.MachineHistory, error)
+	GetMachineHistoryByID(ctx context.Context, idMachine string) ([]stock.MachineHistory, error)
+	GetAllMachineHistoryCount(ctx context.Context, idMachine, idCustomer string) (int, error)
+	GetLastMachineHistoryByMachineID(ctx context.Context, id string) (stock.MachineHistory, error)
+	CreateMachineHistory(ctx context.Context, history stock.MachineHistory) error
+	UpdateMachineHistory(ctx context.Context, history stock.MachineHistory) error
+	DeleteMachineHistory(ctx context.Context, id int) error
 }
 
 // Service ...

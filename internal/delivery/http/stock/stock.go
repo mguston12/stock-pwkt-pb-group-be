@@ -69,6 +69,14 @@ type StockSvc interface {
 	GetReturnInventoryByStatus(ctx context.Context, status string) ([]stock.ReturnInventory, error)
 	ProcessReturnSparepart(ctx context.Context, input stock.ReturnInventory) error
 	ApproveReturnInventory(ctx context.Context, input stock.ReturnInventory) error
+
+	GetAllMachineHistories(ctx context.Context, idMachine, idCustomer string, page, length int) ([]stock.MachineHistory, int, error)
+	GetMachineHistoryByID(ctx context.Context, idMachine string) ([]stock.MachineHistory, error)
+	CreateMachineHistory(ctx context.Context, history stock.MachineHistory) error
+	UpdateMachineHistory(ctx context.Context, history stock.MachineHistory) error
+	DeleteMachineHistory(ctx context.Context, id int) error
+	ReplaceCustomerMachine(ctx context.Context, oldMachineID, newMachineID, customerID string) error
+	DeactivateMachine(ctx context.Context, machineID string) error
 }
 
 type Handler struct {

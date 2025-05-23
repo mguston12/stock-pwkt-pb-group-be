@@ -96,6 +96,15 @@ type ReturnInventory struct {
 	NamaSparepart string     `db:"nama_sparepart" json:"nama_sparepart"`
 }
 
+type MachineHistory struct {
+	IDHistory      int        `db:"id_history"`
+	IDMachine      string     `db:"id_machine"`
+	IDCustomer     string     `db:"id_customer"`
+	TanggalMulai   time.Time  `db:"tanggal_mulai"`
+	TanggalSelesai *time.Time `db:"tanggal_selesai"`
+	Status         string     `db:"status"`
+}
+
 type InventoryUsage struct {
 	InventoryID int    `json:"id_inventory"`
 	MachineID   string `json:"id_machine"`
