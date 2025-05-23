@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"log"
 	"stock/internal/entity/stock"
 	"stock/pkg/errors"
 )
@@ -20,6 +21,19 @@ func (s Service) GetPembelianSparepartByID(ctx context.Context, id string) ([]st
 	if err != nil {
 		return pembelian_sp, errors.Wrap(err, "[SERVICE][GetPembelianSparepartByID]")
 	}
+
+	log.Println(pembelian_sp)
+
+	return pembelian_sp, nil
+}
+
+func (s Service) GetPembelianSparepartBySupplier(ctx context.Context, id string) ([]stock.PembelianSparepart, error) {
+	pembelian_sp, err := s.data.GetPembelianSparepartBySupplier(ctx, id)
+	if err != nil {
+		return pembelian_sp, errors.Wrap(err, "[SERVICE][GetPembelianSparepartBySupplier]")
+	}
+
+	log.Println(pembelian_sp)
 
 	return pembelian_sp, nil
 }

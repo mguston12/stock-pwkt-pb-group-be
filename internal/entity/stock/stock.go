@@ -74,6 +74,7 @@ type Inventory struct {
 type PembelianSparepart struct {
 	ID               string    `db:"id_pembelian" json:"id_pembelian"`
 	Sparepart        string    `db:"id_sparepart" json:"id_sparepart"`
+	NamaSparepart    string    `db:"nama_sparepart" json:"nama_sparepart"`
 	TanggalPembelian time.Time `db:"tanggal_pembelian" json:"tanggal_pembelian"`
 	Quantity         int       `db:"quantity" json:"quantity"`
 	HargaPerUnit     float64   `db:"harga_per_unit" json:"harga_per_unit"`
@@ -110,12 +111,12 @@ type SparepartCostFilter struct {
 }
 
 type SparepartCostResult struct {
-	CustomerID   string  `db:"id_customer"`   // Memetakan ke kolom id_customer
-	CustomerName string  `db:"nama_customer"` // Memetakan ke kolom nama_customer
-	MachineID    string  `db:"id_machine"`    // Memetakan ke kolom id_machine
-	Month        string  `db:"bulan"`         // Memetakan ke kolom bulan
-	Year         int     `db:"tahun"`         // Memetakan ke kolom tahun
-	TotalCost    float64 `db:"total_cost"`    // Memetakan ke kolom total_cost
+	CustomerID   string  `db:"id_customer"`
+	CustomerName string  `db:"nama_customer"`
+	MachineID    string  `db:"id_machine"`
+	Month        string  `db:"bulan"`
+	Year         int     `db:"tahun"`
+	TotalCost    float64 `db:"total_cost"`
 }
 
 type User struct {

@@ -53,6 +53,7 @@ type StockSvc interface {
 
 	GetPembelianSparepart(ctx context.Context) ([]stock.PembelianSparepart, error)
 	GetPembelianSparepartByID(ctx context.Context, id string) ([]stock.PembelianSparepart, error)
+	GetPembelianSparepartBySupplier(ctx context.Context, id string) ([]stock.PembelianSparepart, error)
 	CreatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error
 	UpdatePembelianSparepart(ctx context.Context, pembelian_sp stock.PembelianSparepart) error
 	DeletePembelianSparepart(ctx context.Context, id string) error

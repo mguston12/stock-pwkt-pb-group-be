@@ -74,6 +74,7 @@ func (s *Server) Handler() *mux.Router {
 	pembeliansp := r.PathPrefix("/purchase").Subrouter()
 	pembeliansp.HandleFunc("", s.Stock.GetPembelianSparepart).Methods("GET")
 	pembeliansp.HandleFunc("/{id}", s.Stock.GetPembelianSparepartByID).Methods("GET")
+	pembeliansp.HandleFunc("/supplier/{id_supplier}", s.Stock.GetPembelianSparepartBySupplier).Methods("GET")
 	pembeliansp.HandleFunc("/create", s.Stock.CreatePembelianSparepart).Methods("POST")
 	pembeliansp.HandleFunc("/update", s.Stock.UpdatePembelianSparepart).Methods("PUT")
 	pembeliansp.HandleFunc("/delete", s.Stock.DeletePembelianSparepart).Methods("DELETE")

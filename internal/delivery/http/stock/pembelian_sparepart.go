@@ -7,6 +7,8 @@ import (
 	httpHelper "stock/internal/delivery/http"
 	"stock/internal/entity/stock"
 	"stock/pkg/response"
+
+	"github.com/gorilla/mux"
 )
 
 func (h *Handler) GetPembelianSparepart(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +45,37 @@ func (h *Handler) GetPembelianSparepartByID(w http.ResponseWriter, r *http.Reque
 	defer resp.RenderJSON(w, r)
 
 	ctx := r.Context()
-	result, err = h.stockSvc.GetPembelianSparepartByID(ctx, r.FormValue("id"))
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	result, err = h.stockSvc.GetPembelianSparepartByID(ctx, id)
+
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	resp.Data = result
+	resp.Metadata = metadata
+
+	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
+}
+
+func (h *Handler) GetPembelianSparepartBySupplier(w http.ResponseWriter, r *http.Request) {
+	var (
+		result   interface{}
+		metadata interface{}
+		err      error
+		resp     response.Response
+	)
+	defer resp.RenderJSON(w, r)
+
+	ctx := r.Context()
+	vars := mux.Vars(r)
+	id := vars["id_supplier"]
+
+	result, err = h.stockSvc.GetPembelianSparepartBySupplier(ctx, id)
 
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())

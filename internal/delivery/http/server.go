@@ -56,6 +56,7 @@ type StockHandler interface {
 
 	GetPembelianSparepart(w http.ResponseWriter, r *http.Request)
 	GetPembelianSparepartByID(w http.ResponseWriter, r *http.Request)
+	GetPembelianSparepartBySupplier(w http.ResponseWriter, r *http.Request)
 	CreatePembelianSparepart(w http.ResponseWriter, r *http.Request)
 	UpdatePembelianSparepart(w http.ResponseWriter, r *http.Request)
 	DeletePembelianSparepart(w http.ResponseWriter, r *http.Request)

@@ -47,11 +47,40 @@ func (d Data) GetPembelianSparepartByID(ctx context.Context, id string) ([]stock
 		return datas, errors.Wrap(err, "[DATA][GetPembelianSparepartByID]")
 	}
 
+	log.Printf("Running GetPembelianSparepartByID with id: %s\n", id)
+
 	for rows.Next() {
 		var data stock.PembelianSparepart
 		err := rows.StructScan(&data)
 		if err != nil {
 			return datas, errors.Wrap(err, "[DATA][GetPembelianSparepartByID]")
+		}
+		datas = append(datas, data)
+	}
+	defer rows.Close()
+
+	return datas, nil
+}
+
+func (d Data) GetPembelianSparepartBySupplier(ctx context.Context, id string) ([]stock.PembelianSparepart, error) {
+	var (
+		rows  *sqlx.Rows
+		datas []stock.PembelianSparepart
+		err   error
+	)
+
+	rows, err = d.stmt[getPembelianSparepartBySupplier].QueryxContext(ctx, id)
+	if err != nil {
+		return datas, errors.Wrap(err, "[DATA][GetPembelianSparepartBySupplier]")
+	}
+
+	log.Printf("Running GetPembelianSparepartBySupplier with id: %s\n", id)
+
+	for rows.Next() {
+		var data stock.PembelianSparepart
+		err := rows.StructScan(&data)
+		if err != nil {
+			return datas, errors.Wrap(err, "[DATA][GetPembelianSparepartBySupplier]")
 		}
 		datas = append(datas, data)
 	}

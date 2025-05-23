@@ -27,32 +27,32 @@ func (s Service) GetReturnInventoryByStatus(ctx context.Context, status string) 
 
 // ProcessReturnSparepart - Fungsi ini mencatat pengembalian sparepart dan memperbarui inventory
 func (s Service) ProcessReturnSparepart(ctx context.Context, input stock.ReturnInventory) error {
-	err := s.data.CreateReturnInventory(ctx, input)
-	if err != nil {
-		return errors.Wrap(err, "[SERVICE][CreateReturnInventory]")
-	}
-
 	inv, err := s.data.GetInventoryByIDInv(ctx, input.IDInventory)
 	if err != nil {
 		return errors.Wrap(err, "[SERVICE][GetInventoryByIDInv]")
 	}
 
-	if inv.Quantity < input.Quantity {
-		return errors.New("[SERVICE][ProcessReturnSparepart] Quantity returned exceeds available stock")
-	}
+	if inv.Quantity <= input.Quantity {
+		return errors.New("Stock pada inventory tidak cukup")
+	} else {
+		err := s.data.CreateReturnInventory(ctx, input)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][CreateReturnInventory]")
+		}
 
-	updatedInventory := stock.Inventory{
-		ID:        input.IDInventory,
-		Sparepart: inv.Sparepart,
-		Quantity:  inv.Quantity - input.Quantity,
-		Teknisi:   input.ReturnedBy,
-	}
+		updatedInventory := stock.Inventory{
+			ID:        input.IDInventory,
+			Sparepart: inv.Sparepart,
+			Quantity:  inv.Quantity - input.Quantity,
+			Teknisi:   input.ReturnedBy,
+		}
 
-	log.Println(updatedInventory)
+		log.Println(updatedInventory)
 
-	err = s.data.UpdateInventory(ctx, updatedInventory)
-	if err != nil {
-		return errors.Wrap(err, "[SERVICE][UpdateInventory]")
+		err = s.data.UpdateInventory(ctx, updatedInventory)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][UpdateInventory]")
+		}
 	}
 
 	return nil

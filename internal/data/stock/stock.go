@@ -251,12 +251,20 @@ const (
 
 	//Pembelian Sparepart
 	getPembelianSparepart  = "GetPembelianSparepart"
-	qGetPembelianSparepart = `SELECT ps.*, s.nama_supplier FROM pembelian_sparepart ps 
-							JOIN supplier s ON ps.id_supplier = s.id_supplier`
+	qGetPembelianSparepart = `SELECT ps.*, s.nama_supplier, sp.nama_sparepart FROM pembelian_sparepart ps 
+							JOIN supplier s ON ps.id_supplier = s.id_supplier 
+							LEFT JOIN sparepart sp ON ps.id_sparepart = sp.id_sparepart`
 
 	getPembelianSparepartByID  = "GetPembelianSparepartByID"
-	qGetPembelianSparepartByID = `SELECT ps.*, s.nama_supplier FROM pembelian_sparepart ps 
-							JOIN supplier s ON ps.id_supplier = s.id_supplier WHERE id_sparepart = ?`
+	qGetPembelianSparepartByID = `SELECT ps.*, s.nama_supplier, sp.nama_sparepart FROM pembelian_sparepart ps 
+							JOIN supplier s ON ps.id_supplier = s.id_supplier 
+							LEFT JOIN sparepart sp ON ps.id_sparepart = sp.id_sparepart WHERE ps.id_sparepart = ?`
+
+	getPembelianSparepartBySupplier  = "GetPembelianSparepartBySupplier"
+	qGetPembelianSparepartBySupplier = `SELECT ps.*, s.nama_supplier, sp.nama_sparepart FROM pembelian_sparepart ps 
+							JOIN supplier s ON ps.id_supplier = s.id_supplier 
+							LEFT JOIN sparepart sp ON ps.id_sparepart = sp.id_sparepart
+							WHERE ps.id_supplier = ?`
 
 	createPembelianSparepart  = "CreatePembelianSparepart"
 	qCreatePembelianSparepart = `INSERT INTO pembelian_sparepart(id_sparepart, quantity, harga_per_unit, id_supplier) 
@@ -358,6 +366,7 @@ var (
 		//pembelian sparepart
 		{getPembelianSparepart, qGetPembelianSparepart},
 		{getPembelianSparepartByID, qGetPembelianSparepartByID},
+		{getPembelianSparepartBySupplier, qGetPembelianSparepartBySupplier},
 		{getAverageCostSparepart, qGetAverageCostSparepart},
 		//supplier
 		{getSuppliers, qGetSuppliers},
