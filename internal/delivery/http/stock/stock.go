@@ -27,6 +27,7 @@ type StockSvc interface {
 	DeleteMachine(ctx context.Context, id string) error
 
 	GetAllCustomers(ctx context.Context) ([]stock.Customer, error)
+	GetCustomersFiltered(ctx context.Context, keyword string, page, length int) ([]stock.Customer, int, error)
 	CreateCustomer(ctx context.Context, customer stock.Customer) error
 	UpdateCustomer(ctx context.Context, customer stock.Customer) error
 	DeleteCustomer(ctx context.Context, id string) error

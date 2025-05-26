@@ -57,7 +57,6 @@ type Customer struct {
 	Company      int       `db:"company_id" json:"company_id"`
 	NamaCustomer string    `db:"nama_customer" json:"nama_customer"`
 	Alamat       string    `db:"alamat" json:"alamat"`
-	PIC          string    `db:"pic" json:"pic"`
 	UpdatedBy    string    `db:"updated_by" json:"updated_by"`
 	UpdatedAt    time.Time `db:"updated_at" json:"updated_at"`
 }
@@ -97,12 +96,14 @@ type ReturnInventory struct {
 }
 
 type MachineHistory struct {
-	IDHistory      int        `db:"id_history"`
-	IDMachine      string     `db:"id_machine"`
-	IDCustomer     string     `db:"id_customer"`
-	TanggalMulai   time.Time  `db:"tanggal_mulai"`
-	TanggalSelesai *time.Time `db:"tanggal_selesai"`
-	Status         string     `db:"status"`
+	IDHistory          int        `db:"id_history" json:"id_history"`
+	IDMachine          string     `db:"id_machine" json:"id_machine"`
+	IDCustomer         string     `db:"id_customer" json:"id_customer"`
+	NamaCustomer       string     `db:"nama_customer" json:"nama_customer"`
+	TanggalMulai       time.Time  `db:"tanggal_mulai" json:"tanggal_mulai"`
+	TanggalMulaiString string     `db:"tanggal_mulai_string" json:"tanggal_mulai_string"`
+	TanggalSelesai     *time.Time `db:"tanggal_selesai" json:"tanggal_selesai"`
+	Status             string     `db:"status" json:"status"`
 }
 
 type InventoryUsage struct {

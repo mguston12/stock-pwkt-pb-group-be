@@ -185,18 +185,29 @@ const (
 	getAllCustomers  = "GetAllCustomers"
 	qGetAllCustomers = `SELECT * FROM customer`
 
+	getAllCustomersPage  = "GetAllCustomersPage"
+	qGetAllCustomersPage = `SELECT * FROM customer WHERE
+						((id_customer LIKE ? OR ? = '')
+						OR
+						(nama_customer LIKE ? OR ? = '')) 
+						LIMIT ?, ?`
+
+	getAllCustomersCount  = "GetAllCustomersCount"
+	qGetAllCustomersCount = `SELECT COUNT(*) FROM customer WHERE
+						((id_customer LIKE ? OR ? = '')
+						OR
+						(nama_customer LIKE ? OR ? = ''))`
+
 	createCustomer  = "CreateCustomer"
 	qCreateCustomer = `INSERT INTO customer(id_customer, company_id, nama_customer, 
-						alamat, pic, updated_by, updated_at) VALUES (?,?,?,?,?,?,?)`
+						alamat, updated_by) VALUES (?,?,?,?,?)`
 
 	updateCustomer  = "UpdateCustomer"
 	qUpdateCustomer = `UPDATE customer 
 						SET 
 							alamat = COALESCE(NULLIF(?,''), alamat), 
 							nama_customer = COALESCE(NULLIF(?,''), nama_customer),
-							pic = COALESCE(NULLIF(?,''), pic), 
-							updated_by = COALESCE(NULLIF(?,''), updated_by), 
-							updated_at = COALESCE(NULLIF(?,''), updated_at)
+							updated_by = COALESCE(NULLIF(?,''), updated_by)
 						WHERE id_customer = ?`
 
 	deleteCustomer  = "DeleteCustomer"
@@ -348,9 +359,10 @@ const (
                                 (id_customer LIKE ? OR ? = '')`
 
 	getMachineHistoryByID  = "GetMachineHistoryByID"
-	qGetMachineHistoryByID = `SELECT * FROM machine_history 
-                          WHERE id_machine = ? 
-                          ORDER BY tanggal_mulai DESC`
+	qGetMachineHistoryByID = `SELECT mh.*, c.nama_customer FROM machine_history mh
+							JOIN customer c ON mh.id_customer = c.id_customer
+                        	WHERE id_machine = ? 
+                        	ORDER BY tanggal_mulai DESC`
 
 	getLastMachineHistoryByMachineID  = "GetLastMachineHistoryByMachineID"
 	qGetLastMachineHistoryByMachineID = `SELECT id_history, id_machine, id_customer, status, tanggal_mulai, tanggal_selesai
@@ -400,6 +412,8 @@ var (
 		{getRequestsCount, qGetRequestsCount},
 		//customer
 		{getAllCustomers, qGetAllCustomers},
+		{getAllCustomersPage, qGetAllCustomersPage},
+		{getAllCustomersCount, qGetAllCustomersCount},
 		//user
 		{getUserByUsername, qGetUserByUsername},
 		//inventory

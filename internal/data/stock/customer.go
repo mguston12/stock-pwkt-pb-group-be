@@ -10,7 +10,7 @@ import (
 )
 
 func (d Data) GetAllCustomers(ctx context.Context) ([]stock.Customer, error) {
-	var ( 
+	var (
 		rows  *sqlx.Rows
 		datas []stock.Customer
 		err   error
@@ -34,15 +34,49 @@ func (d Data) GetAllCustomers(ctx context.Context) ([]stock.Customer, error) {
 	return datas, nil
 }
 
+func (d Data) GetAllCustomersPage(ctx context.Context, keyword string, offset, limit int) ([]stock.Customer, error) {
+	customers := []stock.Customer{}
+
+	_keyword := "%" + keyword + "%"
+
+	rows, err := d.stmt[getAllCustomersPage].QueryxContext(ctx, _keyword, _keyword, _keyword, _keyword, offset, limit)
+	if err != nil {
+		return customers, errors.Wrap(err, "[DATA][GetAllCustomersPage]")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		customer := stock.Customer{}
+		if err = rows.StructScan(&customer); err != nil {
+			return customers, errors.Wrap(err, "[DATA][GetAllCustomersPage]")
+		}
+		customers = append(customers, customer)
+	}
+
+	return customers, nil
+}
+
+func (d Data) GetAllCustomersCount(ctx context.Context, keyword string) ([]stock.Customer, int, error) {
+	customers := []stock.Customer{}
+	var count int
+
+	_keyword := "%" + keyword + "%"
+
+	if err := d.stmt[getAllCustomersCount].QueryRowxContext(ctx, _keyword, _keyword, _keyword, _keyword).Scan(&count); err != nil {
+		return customers, count, errors.Wrap(err, "[DATA][GetAllCustomersCount]")
+	}
+
+	return customers, count, nil
+}
+
 func (d Data) CreateCustomer(ctx context.Context, customer stock.Customer) error {
 	_, err := d.stmt[createCustomer].ExecContext(ctx,
 		customer.ID,
 		customer.Company,
 		customer.NamaCustomer,
 		customer.Alamat,
-		customer.PIC,
 		customer.UpdatedBy,
-		customer.UpdatedAt,
 	)
 
 	if err != nil {
@@ -53,11 +87,9 @@ func (d Data) CreateCustomer(ctx context.Context, customer stock.Customer) error
 
 func (d Data) UpdateCustomer(ctx context.Context, customer stock.Customer) error {
 	_, err := d.stmt[updateCustomer].ExecContext(ctx,
-		customer.NamaCustomer,
 		customer.Alamat,
-		customer.PIC,
+		customer.NamaCustomer,
 		customer.UpdatedBy,
-		customer.UpdatedAt,
 		customer.ID,
 	)
 

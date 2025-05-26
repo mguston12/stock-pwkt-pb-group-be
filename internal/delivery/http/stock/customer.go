@@ -7,6 +7,7 @@ import (
 	httpHelper "stock/internal/delivery/http"
 	"stock/internal/entity/stock"
 	"stock/pkg/response"
+	"strconv"
 )
 
 func (h *Handler) GetAllCustomers(w http.ResponseWriter, r *http.Request) {
@@ -20,6 +21,33 @@ func (h *Handler) GetAllCustomers(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 	result, err = h.stockSvc.GetAllCustomers(ctx)
+
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	resp.Data = result
+	resp.Metadata = metadata
+
+	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
+}
+
+func (h *Handler) GetCustomersFiltered(w http.ResponseWriter, r *http.Request) {
+	var (
+		result   interface{}
+		metadata interface{}
+		err      error
+		resp     response.Response
+	)
+	defer resp.RenderJSON(w, r)
+
+	page, _ := strconv.Atoi(r.FormValue("page"))
+	length, _ := strconv.Atoi(r.FormValue("length"))
+
+	ctx := r.Context()
+	result, metadata, err = h.stockSvc.GetCustomersFiltered(ctx, r.FormValue("keyword"), page, length)
 
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())

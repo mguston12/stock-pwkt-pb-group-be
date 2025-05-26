@@ -53,6 +53,11 @@ func (s Service) GetMachineHistoryByID(ctx context.Context, idMachine string) ([
 
 // CreateMachineHistory ...
 func (s Service) CreateMachineHistory(ctx context.Context, history stock.MachineHistory) error {
+	layoutFormat := "2006-01-02"
+
+	_periodeAwal, _ := time.Parse(layoutFormat, history.TanggalMulaiString)
+	history.TanggalMulai = _periodeAwal
+
 	err := s.data.CreateMachineHistory(ctx, history)
 	if err != nil {
 		return errors.Wrap(err, "[SERVICE][CreateMachineHistory]")

@@ -32,6 +32,7 @@ type StockHandler interface {
 	DeactivateMachine(w http.ResponseWriter, r *http.Request)
 
 	GetAllCustomers(w http.ResponseWriter, r *http.Request)
+	GetCustomersFiltered(w http.ResponseWriter, r *http.Request)
 	CreateCustomer(w http.ResponseWriter, r *http.Request)
 	UpdateCustomer(w http.ResponseWriter, r *http.Request)
 	DeleteCustomer(w http.ResponseWriter, r *http.Request)

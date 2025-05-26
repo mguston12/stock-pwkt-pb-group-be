@@ -47,7 +47,7 @@ func (s *Server) Handler() *mux.Router {
 	machine.HandleFunc("/delete", s.Stock.DeleteMachine).Methods("DELETE")
 
 	customer := r.PathPrefix("/customers").Subrouter()
-	customer.HandleFunc("", s.Stock.GetAllCustomers).Methods("GET")
+	customer.HandleFunc("", s.Stock.GetCustomersFiltered).Methods("GET")
 	customer.HandleFunc("/create", s.Stock.CreateCustomer).Methods("POST")
 	customer.HandleFunc("/update", s.Stock.UpdateCustomer).Methods("PUT")
 	customer.HandleFunc("/delete", s.Stock.DeleteCustomer).Methods("DELETE")

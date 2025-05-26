@@ -37,6 +37,8 @@ type Data interface {
 	DeleteMachine(ctx context.Context, id string) error
 
 	GetAllCustomers(ctx context.Context) ([]stock.Customer, error)
+	GetAllCustomersPage(ctx context.Context, keyword string, offset, limit int) ([]stock.Customer, error)
+	GetAllCustomersCount(ctx context.Context, keyword string) ([]stock.Customer, int, error)
 	CreateCustomer(ctx context.Context, customer stock.Customer) error
 	UpdateCustomer(ctx context.Context, customer stock.Customer) error
 	DeleteCustomer(ctx context.Context, id string) error
