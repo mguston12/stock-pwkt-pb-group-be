@@ -23,6 +23,7 @@ type StockHandler interface {
 	DeleteTeknisi(w http.ResponseWriter, r *http.Request)
 
 	GetAllMachines(w http.ResponseWriter, r *http.Request)
+	GetMachinesFiltered(w http.ResponseWriter, r *http.Request)
 	GetMachineByID(w http.ResponseWriter, r *http.Request)
 	GetMachineByIDCustomer(w http.ResponseWriter, r *http.Request)
 	CreateMachine(w http.ResponseWriter, r *http.Request)
@@ -82,6 +83,8 @@ type StockHandler interface {
 	CreateMachineHistory(w http.ResponseWriter, r *http.Request)
 	UpdateMachineHistory(w http.ResponseWriter, r *http.Request)
 	DeleteMachineHistory(w http.ResponseWriter, r *http.Request)
+
+	ExportExcel(w http.ResponseWriter, r *http.Request)
 }
 
 // Server ...

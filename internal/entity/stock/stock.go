@@ -16,11 +16,12 @@ type Teknisi struct {
 }
 
 type Machine struct {
-	ID       string `db:"id_machine" json:"id_machine"`
-	Type     string `db:"tipe_machine" json:"tipe_machine"`
-	Counter  int    `db:"counter" json:"counter"`
-	Customer string `db:"id_customer" json:"id_customer"`
-	History  []SparepartHistory
+	ID           string `db:"id_machine" json:"id_machine"`
+	Type         string `db:"tipe_machine" json:"tipe_machine"`
+	Counter      int    `db:"counter" json:"counter"`
+	Customer     string `db:"id_customer" json:"id_customer"`
+	NamaCustomer string `db:"nama_customer" json:"nama_customer"`
+	History      []SparepartHistory
 }
 
 type Request struct {
@@ -48,6 +49,21 @@ type SparepartHistory struct {
 	NamaSparepart string    `json:"nama_sparepart"`
 	Quantity      int       `db:"quantity" json:"quantity"`
 	Counter       int       `db:"counter" json:"counter"`
+	UpdatedBy     string    `db:"updated_by" json:"updated_by"`
+	UpdatedAt     time.Time `db:"updated_at" json:"updated_at"`
+}
+
+type ReportData struct {
+	IDHistory     int       `db:"id_history" json:"id_history"`
+	IDTeknisi     string    `db:"id_teknisi" json:"id_teknisi"`
+	NamaTeknisi   string    `db:"nama_teknisi" json:"nama_teknisi"`
+	IDMachine     string    `db:"id_machine" json:"id_machine"`
+	IDSparepart   string    `db:"id_sparepart" json:"id_sparepart"`
+	NamaSparepart string    `db:"nama_sparepart" json:"nama_sparepart"`
+	NamaCustomer  string    `db:"nama_customer" json:"nama_customer"`
+	Quantity      int       `db:"quantity" json:"quantity"`
+	Counter       int       `db:"counter" json:"counter"`
+	AverageCost   float64   `db:"average_cost" json:"average_cost"`
 	UpdatedBy     string    `db:"updated_by" json:"updated_by"`
 	UpdatedAt     time.Time `db:"updated_at" json:"updated_at"`
 }

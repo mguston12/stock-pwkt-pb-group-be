@@ -34,6 +34,42 @@ func (d Data) GetAllMachines(ctx context.Context) ([]stock.Machine, error) {
 	return datas, nil
 }
 
+func (d Data) GetAllMachinesPage(ctx context.Context, keyword string, offset, limit int) ([]stock.Machine, error) {
+	machines := []stock.Machine{}
+
+	_keyword := "%" + keyword + "%"
+
+	rows, err := d.stmt[getAllMachinesPage].QueryxContext(ctx, _keyword, _keyword, _keyword, _keyword, offset, limit)
+	if err != nil {
+		return machines, errors.Wrap(err, "[DATA][GetAllMachinesPage]")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		machine := stock.Machine{}
+		if err = rows.StructScan(&machine); err != nil {
+			return machines, errors.Wrap(err, "[DATA][GetAllMachinesPage]")
+		}
+		machines = append(machines, machine)
+	}
+
+	return machines, nil
+}
+
+func (d Data) GetAllMachinesCount(ctx context.Context, keyword string) ([]stock.Machine, int, error) {
+	machines := []stock.Machine{}
+	var count int
+
+	_keyword := "%" + keyword + "%"
+
+	if err := d.stmt[getAllMachinesCount].QueryRowxContext(ctx, _keyword, _keyword, _keyword, _keyword).Scan(&count); err != nil {
+		return machines, count, errors.Wrap(err, "[DATA][GetAllMachinesCount]")
+	}
+
+	return machines, count, nil
+}
+
 func (d Data) GetMachineByID(ctx context.Context, id string) (stock.Machine, error) {
 	machine := stock.Machine{}
 

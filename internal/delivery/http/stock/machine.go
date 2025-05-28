@@ -7,6 +7,7 @@ import (
 	httpHelper "stock/internal/delivery/http"
 	"stock/internal/entity/stock"
 	"stock/pkg/response"
+	"strconv"
 )
 
 func (h *Handler) GetAllMachines(w http.ResponseWriter, r *http.Request) {
@@ -21,6 +22,34 @@ func (h *Handler) GetAllMachines(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	result, err = h.stockSvc.GetAllMachines(ctx)
 
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	resp.Data = result
+	resp.Metadata = metadata
+
+	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
+}
+
+func (h *Handler) GetMachinesFiltered(w http.ResponseWriter, r *http.Request) {
+	var (
+		result   interface{}
+		metadata interface{}
+		err      error
+		resp     response.Response
+	)
+	defer resp.RenderJSON(w, r)
+
+	page, _ := strconv.Atoi(r.FormValue("page"))
+	length, _ := strconv.Atoi(r.FormValue("length"))
+
+	ctx := r.Context()
+	result, metadata, err = h.stockSvc.GetMachinesFiltered(ctx, r.FormValue("keyword"), page, length)
+
+	
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
 		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())

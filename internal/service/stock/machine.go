@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"math"
 	"stock/internal/entity/stock"
 	"stock/pkg/errors"
 )
@@ -14,6 +15,36 @@ func (s Service) GetAllMachines(ctx context.Context) ([]stock.Machine, error) {
 	}
 
 	return machine, nil
+}
+
+func (s Service) GetMachinesFiltered(ctx context.Context, keyword string, page, length int) ([]stock.Machine, int, error) {
+	limit := length
+	offset := (page - 1) * length
+	var lastPage int
+
+	if page != 0 && length != 0 {
+		machines, count, err := s.data.GetAllMachinesCount(ctx, keyword)
+		if err != nil {
+			return machines, lastPage, errors.Wrap(err, "[SERVICE][GetMachinesFiltered][COUNT]")
+
+		}
+
+		lastPage = int(math.Ceil(float64(count) / float64(length)))
+
+		machines, err = s.data.GetAllMachinesPage(ctx, keyword, offset, limit)
+		if err != nil {
+			return machines, lastPage, errors.Wrap(err, "[SERVICE][GetMachinesFiltered]")
+		}
+
+		return machines, lastPage, errors.Wrap(err, "[SERVICE][GetMachinesFiltered]")
+	}
+
+	machines, err := s.data.GetAllMachines(ctx)
+	if err != nil {
+		return machines, lastPage, errors.Wrap(err, "[SERVICE][GetMachinesFiltered]")
+	}
+
+	return machines, lastPage, nil
 }
 
 func (s Service) GetMachineByID(ctx context.Context, id string) (stock.Machine, error) {

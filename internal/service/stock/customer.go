@@ -35,11 +35,13 @@ func (s Service) GetCustomersFiltered(ctx context.Context, keyword string, page,
 		if err != nil {
 			return customers, lastPage, errors.Wrap(err, "[SERVICE][GetCustomersFiltered]")
 		}
+
+		return customers, lastPage, nil
 	}
 
 	customers, err := s.data.GetAllCustomers(ctx)
 	if err != nil {
-		return customers, lastPage, errors.Wrap(err, "[SERVICE][GetCustomersFilteredf]")
+		return customers, lastPage, errors.Wrap(err, "[SERVICE][GetCustomersFiltered]")
 	}
 
 	return customers, lastPage, nil

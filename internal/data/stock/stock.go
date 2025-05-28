@@ -117,13 +117,30 @@ const (
 
 	//Mesin
 	getAllMachines  = "GetAllMachines"
-	qGetAllMachines = `SELECT id_machine, tipe_machine, COALESCE(id_customer, 'N/A') AS id_customer FROM machine`
+	qGetAllMachines = `SELECT m.id_machine, m.tipe_machine, COALESCE(m.id_customer, '') AS id_customer, COALESCE(c.nama_customer, '') AS nama_customer
+						FROM machine m LEFT JOIN customer c ON m.id_customer = c.id_customer`
+
+	getAllMachinesPage  = "GetAllMachinesPage"
+	qGetAllMachinesPage = `SELECT m.id_machine, m.tipe_machine, COALESCE(m.id_customer, '') AS id_customer, COALESCE(c.nama_customer, '') AS nama_customer
+							FROM machine m LEFT JOIN customer c ON m.id_customer = c.id_customer
+							WHERE 
+								((m.id_machine LIKE ? OR ? = '')
+							OR
+								(m.tipe_machine LIKE ? OR ? = '')) 
+							LIMIT ?, ?`
+
+	getAllMachinesCount  = "GetAllMachinesCount"
+	qGetAllMachinesCount = `SELECT COUNT(m.id_machine) FROM machine m LEFT JOIN customer c ON m.id_customer = c.id_customer
+							WHERE 
+								((m.id_machine LIKE ? OR ? = '')
+							OR
+								(m.tipe_machine LIKE ? OR ? = ''))`
 
 	getMachineByID  = "GetMachineByID"
-	qGetMachineByID = `SELECT id_machine, tipe_machine, COALESCE(id_customer, 'N/A') AS id_customer FROM machine WHERE id_machine = ?`
+	qGetMachineByID = `SELECT id_machine, tipe_machine, COALESCE(id_customer, '') AS id_customer FROM machine WHERE id_machine = ?`
 
 	getMachineByIDCustomer  = "GetMachineByIDCustomer"
-	qGetMachineByIDCustomer = `SELECT id_machine, tipe_machine, COALESCE(id_customer, 'N/A') AS id_customer FROM machine WHERE id_customer = ?`
+	qGetMachineByIDCustomer = `SELECT id_machine, tipe_machine, COALESCE(id_customer, '') AS id_customer FROM machine WHERE id_customer = ?`
 
 	createMachine  = "CreateMachine"
 	qCreateMachine = `INSERT INTO machine(id_machine, tipe_machine, id_customer) VALUES (?,?,?)`
@@ -404,6 +421,8 @@ var (
 		{getTeknisiByID, qGetTeknisiByID},
 		//machine
 		{getAllMachines, qGetAllMachines},
+		{getAllMachinesPage, qGetAllMachinesPage},
+		{getAllMachinesCount, qGetAllMachinesCount},
 		{getMachineByID, qGetMachineByID},
 		{getMachineByIDCustomer, qGetMachineByIDCustomer},
 		//request

@@ -30,6 +30,8 @@ type Data interface {
 	DeleteTeknisi(ctx context.Context, id string) error
 
 	GetAllMachines(ctx context.Context) ([]stock.Machine, error)
+	GetAllMachinesPage(ctx context.Context, keyword string, offset, limit int) ([]stock.Machine, error)
+	GetAllMachinesCount(ctx context.Context, keyword string) ([]stock.Machine, int, error)
 	GetMachineByID(ctx context.Context, id string) (stock.Machine, error)
 	GetMachineByIDCustomer(ctx context.Context, id string) ([]stock.Machine, error)
 	CreateMachine(ctx context.Context, machine stock.Machine) error
@@ -94,6 +96,8 @@ type Data interface {
 	CreateMachineHistory(ctx context.Context, history stock.MachineHistory) error
 	UpdateMachineHistory(ctx context.Context, history stock.MachineHistory) error
 	DeleteMachineHistory(ctx context.Context, id int) error
+
+	GetSparepartHistoryByMonth(ctx context.Context, bulan, tahun int) ([]stock.ReportData, error)
 }
 
 // Service ...

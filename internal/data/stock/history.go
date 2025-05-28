@@ -113,3 +113,5 @@ func (d Data) DeleteSparepartHistory(ctx context.Context, id string) error {
 	}
 	return nil
 }
+
+

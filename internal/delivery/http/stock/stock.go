@@ -20,6 +20,7 @@ type StockSvc interface {
 	DeleteTeknisi(ctx context.Context, id string) error
 
 	GetAllMachines(ctx context.Context) ([]stock.Machine, error)
+	GetMachinesFiltered(ctx context.Context, keyword string, page, length int) ([]stock.Machine, int, error)
 	GetMachineByID(ctx context.Context, id string) (stock.Machine, error)
 	GetMachineByIDCustomer(ctx context.Context, id string) ([]stock.Machine, error)
 	CreateMachine(ctx context.Context, machine stock.Machine) error
@@ -78,6 +79,8 @@ type StockSvc interface {
 	DeleteMachineHistory(ctx context.Context, id int) error
 	ReplaceCustomerMachine(ctx context.Context, oldMachineID, newMachineID, customerID string) error
 	DeactivateMachine(ctx context.Context, machineID string) error
+	
+	ExportExcel(ctx context.Context, bulan, tahun int) ([]byte, string, error)
 }
 
 type Handler struct {
