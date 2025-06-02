@@ -66,13 +66,13 @@ func (s *Server) Handler() *mux.Router {
 
 	// Public route: /users/login
 	router.HandleFunc("/users/login", s.Stock.MatchPassword).Methods("POST")
+	router.HandleFunc("/users/update", s.Stock.UpdateUser).Methods("PUT")
 
 	// Protected routes: /users/*
 	user := router.PathPrefix("/users").Subrouter()
 	user.Use(middleware.AuthMiddleware)
 	user.HandleFunc("", s.Stock.GetUserByUsername).Methods("GET")
 	user.HandleFunc("/create", s.Stock.CreateUser).Methods("POST")
-	user.HandleFunc("/update", s.Stock.UpdateUser).Methods("PUT")
 	user.HandleFunc("/delete", s.Stock.DeleteUser).Methods("DELETE")
 
 	inventory := r.PathPrefix("/inventory").Subrouter()
