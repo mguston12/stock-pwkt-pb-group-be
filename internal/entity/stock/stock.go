@@ -41,16 +41,18 @@ type Request struct {
 }
 
 type SparepartHistory struct {
-	IDHistory     int       `db:"id_history" json:"id_history"`
-	IDTeknisi     string    `db:"id_teknisi" json:"id_teknisi"`
-	NamaTeknisi   string    `json:"nama_teknisi"`
-	IDMachine     string    `db:"id_machine" json:"id_machine"`
-	IDSparepart   string    `db:"id_sparepart" json:"id_sparepart"`
-	NamaSparepart string    `json:"nama_sparepart"`
-	Quantity      int       `db:"quantity" json:"quantity"`
-	Counter       int       `db:"counter" json:"counter"`
-	UpdatedBy     string    `db:"updated_by" json:"updated_by"`
-	UpdatedAt     time.Time `db:"updated_at" json:"updated_at"`
+	IDHistory       int       `db:"id_history" json:"id_history"`
+	IDTeknisi       string    `db:"id_teknisi" json:"id_teknisi"`
+	NamaTeknisi     string    `json:"nama_teknisi"`
+	IDMachine       string    `db:"id_machine" json:"id_machine"`
+	IDSparepart     string    `db:"id_sparepart" json:"id_sparepart"`
+	NamaSparepart   string    `json:"nama_sparepart"`
+	Quantity        int       `db:"quantity" json:"quantity"`
+	Counter         int       `db:"counter" json:"counter"`
+	CounterColour   int       `db:"counter_colour" json:"counter_colour"`
+	CounterColourA3 int       `db:"counter_colour_a3" json:"counter_colour_a3"`
+	UpdatedBy       string    `db:"updated_by" json:"updated_by"`
+	UpdatedAt       time.Time `db:"updated_at" json:"updated_at"`
 }
 
 type ReportData struct {
@@ -123,10 +125,12 @@ type MachineHistory struct {
 }
 
 type InventoryUsage struct {
-	InventoryID int    `json:"id_inventory"`
-	MachineID   string `json:"id_machine"`
-	Counter     int    `json:"counter"`
-	UpdatedBy   string `json:"updated_by"`
+	InventoryID     int    `json:"id_inventory"`
+	MachineID       string `json:"id_machine"`
+	Counter         int    `json:"counter"`
+	CounterColour   int    `json:"counter_colour"`
+	CounterColourA3 int    `json:"counter_colour_a3"`
+	UpdatedBy       string `json:"updated_by"`
 }
 
 type SparepartCostFilter struct {
@@ -148,6 +152,7 @@ type SparepartCostResult struct {
 type User struct {
 	Username string `db:"username" json:"username"`
 	Password string `db:"password" json:"password"`
+	Role     string `db:"role" json:"role"`
 }
 
 type Supplier struct {

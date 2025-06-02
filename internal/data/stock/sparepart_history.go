@@ -78,6 +78,8 @@ func (d Data) CreateSparepartHistory(ctx context.Context, history stock.Sparepar
 		history.IDSparepart,
 		history.Quantity,
 		history.Counter,
+		history.CounterColour,
+		history.CounterColourA3,
 		history.UpdatedBy,
 	)
 
@@ -94,6 +96,8 @@ func (d Data) UpdateSparepartHistory(ctx context.Context, history stock.Sparepar
 		history.IDSparepart,
 		history.Quantity,
 		history.Counter,
+		history.CounterColour,
+		history.CounterColourA3,
 		history.UpdatedBy,
 		history.UpdatedAt,
 		history.IDHistory,
@@ -113,5 +117,3 @@ func (d Data) DeleteSparepartHistory(ctx context.Context, id string) error {
 	}
 	return nil
 }
-
-

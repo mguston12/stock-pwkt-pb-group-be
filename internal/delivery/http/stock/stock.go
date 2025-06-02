@@ -44,7 +44,8 @@ type StockSvc interface {
 	UpdateUser(ctx context.Context, user stock.User) error
 	DeleteUser(ctx context.Context, username string) error
 
-	MatchPassword(ctx context.Context, login stock.User) error
+	// MatchPassword(ctx context.Context, login stock.User) error
+	Login(ctx context.Context, username, password string) (string, error)
 
 	GetAllInventory(ctx context.Context) ([]stock.Inventory, error)
 	GetInventoryByID(ctx context.Context, id string) ([]stock.Inventory, error)
@@ -79,7 +80,7 @@ type StockSvc interface {
 	DeleteMachineHistory(ctx context.Context, id int) error
 	ReplaceCustomerMachine(ctx context.Context, oldMachineID, newMachineID, customerID string) error
 	DeactivateMachine(ctx context.Context, machineID string) error
-	
+
 	ExportExcel(ctx context.Context, bulan, tahun int) ([]byte, string, error)
 }
 

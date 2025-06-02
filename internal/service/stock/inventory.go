@@ -65,12 +65,14 @@ func (s Service) InventoryUsage(ctx context.Context, input stock.InventoryUsage)
 	}
 
 	history := stock.SparepartHistory{
-		IDTeknisi:   input.UpdatedBy,
-		IDMachine:   input.MachineID,
-		IDSparepart: inventory.Sparepart,
-		Quantity:    1,
-		Counter:     input.Counter,
-		UpdatedBy:   input.UpdatedBy,
+		IDTeknisi:       input.UpdatedBy,
+		IDMachine:       input.MachineID,
+		IDSparepart:     inventory.Sparepart,
+		Quantity:        1,
+		Counter:         input.Counter,
+		CounterColour:   input.CounterColour,
+		CounterColourA3: input.CounterColourA3,
+		UpdatedBy:       input.UpdatedBy,
 	}
 
 	err = s.data.CreateSparepartHistory(ctx, history)

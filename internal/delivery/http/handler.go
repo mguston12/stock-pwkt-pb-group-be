@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"stock/internal/middleware"
 	"stock/pkg/response"
 
 	"github.com/gorilla/mux"
@@ -23,6 +24,7 @@ func (s *Server) Handler() *mux.Router {
 	// Routes
 
 	sparepart := r.PathPrefix("/spareparts").Subrouter()
+	sparepart.Use(middleware.AuthMiddleware)
 	sparepart.HandleFunc("/create", s.Stock.CreateSparepart).Methods("POST")
 	sparepart.HandleFunc("/update", s.Stock.UpdateSparepart).Methods("PUT")
 	sparepart.HandleFunc("/delete", s.Stock.DeleteSparepart).Methods("DELETE")
@@ -30,6 +32,7 @@ func (s *Server) Handler() *mux.Router {
 	sparepart.HandleFunc("/cost", s.Stock.GetSparepartCost).Methods("GET")
 
 	teknisi := r.PathPrefix("/teknisi").Subrouter()
+	teknisi.Use(middleware.AuthMiddleware)
 	teknisi.HandleFunc("", s.Stock.GetAllTeknisi).Methods("GET")
 	teknisi.HandleFunc("/detail", s.Stock.GetTeknisiByID).Methods("GET")
 	teknisi.HandleFunc("/create", s.Stock.CreateTeknisi).Methods("POST")
@@ -37,6 +40,7 @@ func (s *Server) Handler() *mux.Router {
 	teknisi.HandleFunc("/delete", s.Stock.DeleteTeknisi).Methods("DELETE")
 
 	machine := r.PathPrefix("/machines").Subrouter()
+	machine.Use(middleware.AuthMiddleware)
 	machine.HandleFunc("", s.Stock.GetMachinesFiltered).Methods("GET")
 	machine.HandleFunc("/customer", s.Stock.GetMachineByIDCustomer).Methods("GET")
 	machine.HandleFunc("/detail", s.Stock.GetMachineByID).Methods("GET")
@@ -47,25 +51,32 @@ func (s *Server) Handler() *mux.Router {
 	machine.HandleFunc("/delete", s.Stock.DeleteMachine).Methods("DELETE")
 
 	customer := r.PathPrefix("/customers").Subrouter()
+	customer.Use(middleware.AuthMiddleware)
 	customer.HandleFunc("", s.Stock.GetCustomersFiltered).Methods("GET")
 	customer.HandleFunc("/create", s.Stock.CreateCustomer).Methods("POST")
 	customer.HandleFunc("/update", s.Stock.UpdateCustomer).Methods("PUT")
 	customer.HandleFunc("/delete", s.Stock.DeleteCustomer).Methods("DELETE")
 
 	request := r.PathPrefix("/requests").Subrouter()
+	request.Use(middleware.AuthMiddleware)
 	request.HandleFunc("", s.Stock.GetRequestsPagination).Methods("GET")
 	request.HandleFunc("/create", s.Stock.CreateRequest).Methods("POST")
 	request.HandleFunc("/update", s.Stock.UpdateRequest).Methods("PUT")
 	request.HandleFunc("/delete", s.Stock.DeleteRequest).Methods("DELETE")
 
-	user := r.PathPrefix("/users").Subrouter()
+	// Public route: /users/login
+	router.HandleFunc("/users/login", s.Stock.MatchPassword).Methods("POST")
+
+	// Protected routes: /users/*
+	user := router.PathPrefix("/users").Subrouter()
+	user.Use(middleware.AuthMiddleware)
 	user.HandleFunc("", s.Stock.GetUserByUsername).Methods("GET")
 	user.HandleFunc("/create", s.Stock.CreateUser).Methods("POST")
 	user.HandleFunc("/update", s.Stock.UpdateUser).Methods("PUT")
 	user.HandleFunc("/delete", s.Stock.DeleteUser).Methods("DELETE")
-	user.HandleFunc("/login", s.Stock.MatchPassword).Methods("POST")
 
 	inventory := r.PathPrefix("/inventory").Subrouter()
+	inventory.Use(middleware.AuthMiddleware)
 	inventory.HandleFunc("", s.Stock.GetAllInventory).Methods("GET")
 	inventory.HandleFunc("/detail", s.Stock.GetInventoryByID).Methods("GET")
 	inventory.HandleFunc("/usage", s.Stock.InventoryUsage).Methods("POST")
@@ -74,6 +85,7 @@ func (s *Server) Handler() *mux.Router {
 	inventory.HandleFunc("/delete", s.Stock.DeleteInventory).Methods("DELETE")
 
 	pembeliansp := r.PathPrefix("/purchase").Subrouter()
+	pembeliansp.Use(middleware.AuthMiddleware)
 	pembeliansp.HandleFunc("", s.Stock.GetPembelianSparepart).Methods("GET")
 	pembeliansp.HandleFunc("/{id}", s.Stock.GetPembelianSparepartByID).Methods("GET")
 	pembeliansp.HandleFunc("/supplier/{id_supplier}", s.Stock.GetPembelianSparepartBySupplier).Methods("GET")
@@ -82,23 +94,27 @@ func (s *Server) Handler() *mux.Router {
 	pembeliansp.HandleFunc("/delete", s.Stock.DeletePembelianSparepart).Methods("DELETE")
 
 	history := r.PathPrefix("/histories").Subrouter()
+	history.Use(middleware.AuthMiddleware)
 	history.HandleFunc("", s.Stock.GetAllSparepartHistory).Methods("GET")
 	history.HandleFunc("/", s.Stock.GetAllSparepartHistory).Methods("GET")
 	history.HandleFunc("/report", s.Stock.ExportExcel).Methods("GET")
 
 	suppliers := r.PathPrefix("/suppliers").Subrouter()
+	suppliers.Use(middleware.AuthMiddleware)
 	suppliers.HandleFunc("", s.Stock.GetSuppliersPagination).Methods("GET")
 	suppliers.HandleFunc("/create", s.Stock.CreateSupplier).Methods("POST")
 	suppliers.HandleFunc("/update", s.Stock.UpdateSupplier).Methods("PUT")
 	suppliers.HandleFunc("/delete", s.Stock.DeleteSupplier).Methods("DELETE")
 
 	returnInv := r.PathPrefix("/return-inventory").Subrouter()
+	returnInv.Use(middleware.AuthMiddleware)
 	returnInv.HandleFunc("", s.Stock.GetAllReturnInventory).Methods("GET")
 	returnInv.HandleFunc("/status", s.Stock.GetReturnInventoryByStatus).Methods("GET")
 	returnInv.HandleFunc("/return", s.Stock.ProcessReturnSparepart).Methods("POST")
 	returnInv.HandleFunc("/approve", s.Stock.ApproveReturnInventory).Methods("POST")
 
 	machine_history := r.PathPrefix("/machine-history").Subrouter()
+	machine_history.Use(middleware.AuthMiddleware)
 	machine_history.HandleFunc("", s.Stock.GetAllMachineHistories).Methods("GET")
 	machine_history.HandleFunc("/detail", s.Stock.GetMachineHistoryByID).Methods("GET")
 	machine_history.HandleFunc("/create", s.Stock.CreateMachineHistory).Methods("POST")

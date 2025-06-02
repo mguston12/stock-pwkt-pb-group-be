@@ -78,7 +78,7 @@ const (
 
 	createSparepartHistory  = "CreateSparepartHistory"
 	qCreateSparepartHistory = `INSERT INTO history_sparepart(id_history, id_teknisi, id_machine, id_sparepart,
-								quantity, counter, updated_by) VALUES (?,?,?,?,?,?,?)`
+								quantity, counter, counter_colour, counter_colour_a3, updated_by) VALUES (?,?,?,?,?,?,?,?,?)`
 
 	updateSparepartHistory  = "UpdateSparepartHistory"
 	qUpdateSparepartHistory = `UPDATE history_sparepart 
@@ -88,6 +88,8 @@ const (
 							id_sparepart = COALESCE(NULLIF(?,''), id_sparepart), 
 							quantity = COALESCE(NULLIF(?,''), quantity), 
 							counter = COALESCE(NULLIF(?,''), counter), 
+							counter_colour = COALESCE(NULLIF(?,''), counter_colour), 
+							counter_colour_a3 = COALESCE(NULLIF(?,''), counter_colour_a3), 
 							updated_by = COALESCE(NULLIF(?,''), updated_by),
 							updated_at = COALESCE(NULLIF(?,''), updated_at)
 						WHERE id_history = ?`

@@ -3,6 +3,7 @@ package stock
 import (
 	"context"
 	"stock/internal/entity/stock"
+	"stock/pkg/auth"
 	"stock/pkg/errors"
 
 	"golang.org/x/crypto/bcrypt"
@@ -25,24 +26,24 @@ func (s Service) GetUserByUsername(ctx context.Context, username string) (stock.
 	return user, nil
 }
 
-func (s Service) MatchPassword(ctx context.Context, login stock.User) error {
-	user, err := s.GetUserByUsername(ctx, login.Username)
-	if err != nil {
-		return errors.New("Username tidak ditemukan.")
-	}
+// func (s Service) MatchPassword(ctx context.Context, login stock.User) error {
+// 	user, err := s.GetUserByUsername(ctx, login.Username)
+// 	if err != nil {
+// 		return errors.New("Username tidak ditemukan.")
+// 	}
 
-	if user.Password == "p4ssw0rd" {
-		return errors.New("Buat Password dulu")
-	}
+// 	if user.Password == "p4ssw0rd" {
+// 		return errors.New("Buat Password dulu")
+// 	}
 
-	// Compare the hashed password stored in DB with the provided one
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password))
-	if err != nil {
-		return errors.New("Salah Password")
-	}
+// 	// Compare the hashed password stored in DB with the provided one
+// 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password))
+// 	if err != nil {
+// 		return errors.New("Salah Password")
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
 func (s Service) CreateUser(ctx context.Context, user stock.User) error {
 	// Hash the password before saving
@@ -87,4 +88,27 @@ func (s Service) DeleteUser(ctx context.Context, username string) error {
 	}
 
 	return nil
+}
+
+func (s Service) Login(ctx context.Context, username, password string) (string, error) {
+	user, err := s.GetUserByUsername(ctx, username)
+	if err != nil {
+		return "", errors.New("Username tidak ditemukan.")
+	}
+
+	if user.Password == "p4ssw0rd" {
+		return "", errors.New("Buat Password dulu")
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return "", errors.New("Salah Password")
+	}
+
+	token, err := auth.GenerateJWT(user.Username, user.Role) // Role must be stored in DB
+	if err != nil {
+		return "", errors.Wrap(err, "[SERVICE][Login][JWT]")
+	}
+
+	return token, nil
 }
