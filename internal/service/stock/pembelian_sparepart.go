@@ -22,8 +22,6 @@ func (s Service) GetPembelianSparepartByID(ctx context.Context, id string) ([]st
 		return pembelian_sp, errors.Wrap(err, "[SERVICE][GetPembelianSparepartByID]")
 	}
 
-	log.Println(pembelian_sp)
-
 	return pembelian_sp, nil
 }
 
@@ -32,8 +30,6 @@ func (s Service) GetPembelianSparepartBySupplier(ctx context.Context, id string)
 	if err != nil {
 		return pembelian_sp, errors.Wrap(err, "[SERVICE][GetPembelianSparepartBySupplier]")
 	}
-
-	log.Println(pembelian_sp)
 
 	return pembelian_sp, nil
 }

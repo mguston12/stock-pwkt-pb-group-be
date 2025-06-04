@@ -37,7 +37,9 @@ func (d Data) GetSuppliers(ctx context.Context) ([]stock.Supplier, error) {
 func (d Data) GetSuppliersPage(ctx context.Context, nama string, offset, limit int) ([]stock.Supplier, error) {
 	suppliers := []stock.Supplier{}
 
-	rows, err := d.stmt[getSuppliersPage].QueryxContext(ctx, nama, nama, offset, limit)
+	_keyword := "%" + nama + "%"
+
+	rows, err := d.stmt[getSuppliersPage].QueryxContext(ctx, _keyword, _keyword, offset, limit)
 	if err != nil {
 		return suppliers, errors.Wrap(err, "[DATA][GetSuppliersPage]")
 	}
@@ -58,8 +60,9 @@ func (d Data) GetSuppliersPage(ctx context.Context, nama string, offset, limit i
 func (d Data) GetSuppliersCount(ctx context.Context, nama string) ([]stock.Supplier, int, error) {
 	suppliers := []stock.Supplier{}
 	var count int
+	_keyword := "%" + nama + "%"
 
-	if err := d.stmt[getSuppliersCount].QueryRowxContext(ctx, nama, nama).Scan(&count); err != nil {
+	if err := d.stmt[getSuppliersCount].QueryRowxContext(ctx, _keyword, _keyword).Scan(&count); err != nil {
 		return suppliers, count, errors.Wrap(err, "[DATA][GetSuppliersCount]")
 	}
 

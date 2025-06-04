@@ -161,7 +161,7 @@ const (
 	qGetAllRequests = `SELECT * FROM request`
 
 	getRequestsPage  = "GetRequestsPage"
-	qGetRequestsPage = `SELECT r.*, sp.nama_sparepart, COALESCE(m.tipe_machine, '') AS tipe_machine, t.nama_teknisi, 
+	qGetRequestsPage = `SELECT r.*, sp.nama_sparepart, COALESCE(sp.quantity,0) AS stock_quantity, COALESCE(m.tipe_machine, '') AS tipe_machine, t.nama_teknisi, 
 						COALESCE(c.nama_customer, '') AS nama_customer FROM request r 
 						LEFT JOIN sparepart sp ON r.id_sparepart = sp.id_sparepart 
 						LEFT JOIN machine m ON r.id_mesin = m.id_machine

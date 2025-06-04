@@ -33,6 +33,7 @@ type Request struct {
 	Sparepart      string    `db:"id_sparepart" json:"id_sparepart"`
 	NamaSparepart  string    `db:"nama_sparepart" json:"nama_sparepart"`
 	Quantity       int       `db:"quantity" json:"quantity"`
+	StockQuantity  int       `db:"stock_quantity" json:"stock_quantity"`
 	Status         string    `db:"status_request" json:"status_request"`
 	TanggalRequest time.Time `db:"tanggal_request" json:"tanggal_request"`
 	UpdatedBy      string    `db:"updated_by" json:"updated_by"`

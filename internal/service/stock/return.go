@@ -32,7 +32,7 @@ func (s Service) ProcessReturnSparepart(ctx context.Context, input stock.ReturnI
 		return errors.Wrap(err, "[SERVICE][GetInventoryByIDInv]")
 	}
 
-	if inv.Quantity <= input.Quantity {
+	if inv.Quantity < input.Quantity {
 		return errors.New("Stock pada inventory tidak cukup")
 	} else {
 		err := s.data.CreateReturnInventory(ctx, input)
