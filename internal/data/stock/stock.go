@@ -119,11 +119,11 @@ const (
 
 	//Mesin
 	getAllMachines  = "GetAllMachines"
-	qGetAllMachines = `SELECT m.id_machine, m.tipe_machine, COALESCE(m.id_customer, '') AS id_customer, COALESCE(c.nama_customer, '') AS nama_customer
+	qGetAllMachines = `SELECT m.id_machine, m.tipe_machine, COALESCE(m.id_customer, '') AS id_customer, COALESCE(m.serial_number, '') AS serial_number, COALESCE(c.nama_customer, '') AS nama_customer
 						FROM machine m LEFT JOIN customer c ON m.id_customer = c.id_customer`
 
 	getAllMachinesPage  = "GetAllMachinesPage"
-	qGetAllMachinesPage = `SELECT m.id_machine, m.tipe_machine, COALESCE(m.id_customer, '') AS id_customer, COALESCE(c.nama_customer, '') AS nama_customer
+	qGetAllMachinesPage = `SELECT m.id_machine, m.tipe_machine, COALESCE(m.id_customer, '') AS id_customer, COALESCE(m.serial_number, '') AS serial_number, COALESCE(c.nama_customer, '') AS nama_customer
 							FROM machine m LEFT JOIN customer c ON m.id_customer = c.id_customer
 							WHERE 
 								((m.id_machine LIKE ? OR ? = '')
@@ -139,13 +139,13 @@ const (
 								(m.tipe_machine LIKE ? OR ? = ''))`
 
 	getMachineByID  = "GetMachineByID"
-	qGetMachineByID = `SELECT id_machine, tipe_machine, COALESCE(id_customer, '') AS id_customer FROM machine WHERE id_machine = ?`
+	qGetMachineByID = `SELECT id_machine, tipe_machine, COALESCE(serial_number, '') AS serial_number, COALESCE(id_customer, '') AS id_customer FROM machine WHERE id_machine = ?`
 
 	getMachineByIDCustomer  = "GetMachineByIDCustomer"
-	qGetMachineByIDCustomer = `SELECT id_machine, tipe_machine, COALESCE(id_customer, '') AS id_customer FROM machine WHERE id_customer = ?`
+	qGetMachineByIDCustomer = `SELECT id_machine, tipe_machine, COALESCE(serial_number, '') AS serial_number, COALESCE(id_customer, '') AS id_customer FROM machine WHERE id_customer = ?`
 
 	createMachine  = "CreateMachine"
-	qCreateMachine = `INSERT INTO machine(id_machine, tipe_machine, id_customer) VALUES (?,?,?)`
+	qCreateMachine = `INSERT INTO machine(id_machine, tipe_machine, serial_number, id_customer) VALUES (?,?,?,?)`
 
 	updateMachine  = "UpdateMachine"
 	qUpdateMachine = `UPDATE machine 

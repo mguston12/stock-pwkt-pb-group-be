@@ -21,6 +21,7 @@ type Machine struct {
 	Counter      int    `db:"counter" json:"counter"`
 	Customer     string `db:"id_customer" json:"id_customer"`
 	NamaCustomer string `db:"nama_customer" json:"nama_customer"`
+	SerialNumber string `db:"serial_number" json:"serial_number"`
 	History      []SparepartHistory
 }
 

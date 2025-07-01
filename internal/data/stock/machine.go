@@ -109,6 +109,7 @@ func (d Data) CreateMachine(ctx context.Context, machine stock.Machine) error {
 	_, err := d.stmt[createMachine].ExecContext(ctx,
 		machine.ID,
 		machine.Type,
+		machine.SerialNumber,
 		machine.Customer,
 	)
 
