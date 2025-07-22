@@ -85,6 +85,8 @@ type StockHandler interface {
 	DeleteMachineHistory(w http.ResponseWriter, r *http.Request)
 
 	ExportExcel(w http.ResponseWriter, r *http.Request)
+	ImportCustomersFromExcel(w http.ResponseWriter, r *http.Request)
+	ImportMachineFromExcel(w http.ResponseWriter, r *http.Request)
 }
 
 // Server ...

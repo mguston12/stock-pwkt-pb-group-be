@@ -45,6 +45,8 @@ type Data interface {
 	UpdateCustomer(ctx context.Context, customer stock.Customer) error
 	DeleteCustomer(ctx context.Context, id string) error
 
+	FetchAndIncreaseCounter(ctx context.Context, company int) (int, error)
+
 	GetAllRequests(ctx context.Context) ([]stock.Request, error)
 	GetRequestsPage(ctx context.Context, teknisi, status string, offset, limit int) ([]stock.Request, error)
 	GetRequestsCount(ctx context.Context, teknisi, status string) ([]stock.Request, int, error)

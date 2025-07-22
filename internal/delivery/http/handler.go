@@ -67,6 +67,8 @@ func (s *Server) Handler() *mux.Router {
 	// Public route: /users/login
 	router.HandleFunc("/users/login", s.Stock.MatchPassword).Methods("POST")
 	router.HandleFunc("/users/update", s.Stock.UpdateUser).Methods("PUT")
+	router.HandleFunc("/croncustomers", s.Stock.ImportCustomersFromExcel).Methods("GET")
+	router.HandleFunc("/cronmachines", s.Stock.ImportMachineFromExcel).Methods("GET")
 
 	// Protected routes: /users/*
 	user := router.PathPrefix("/users").Subrouter()

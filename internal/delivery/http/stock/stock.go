@@ -32,6 +32,7 @@ type StockSvc interface {
 	CreateCustomer(ctx context.Context, customer stock.Customer) error
 	UpdateCustomer(ctx context.Context, customer stock.Customer) error
 	DeleteCustomer(ctx context.Context, id string) error
+	ImportCustomersFromExcel(ctx context.Context) error
 
 	GetAllRequests(ctx context.Context) ([]stock.Request, error)
 	GetRequestsPagination(ctx context.Context, keyword, status string, page, length int) ([]stock.Request, int, error)
@@ -82,6 +83,7 @@ type StockSvc interface {
 	DeactivateMachine(ctx context.Context, machineID string) error
 
 	ExportExcel(ctx context.Context, bulan, tahun int) ([]byte, string, error)
+	ImportMachineFromExcel(ctx context.Context) error
 }
 
 type Handler struct {

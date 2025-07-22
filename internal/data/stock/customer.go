@@ -107,3 +107,23 @@ func (d Data) DeleteCustomer(ctx context.Context, id string) error {
 	}
 	return nil
 }
+
+func (d Data) FetchAndIncreaseCounter(ctx context.Context, company int) (int, error) {
+	counter := 0
+	tx, err := d.db.Beginx()
+	if err != nil {
+		return counter, errors.Wrap(err, "[DATA][FetchAndIncreaseCounter]")
+	}
+	if err := tx.QueryRowxContext(ctx, `SELECT count FROM counter WHERE company = ?`, company).Scan(&counter); err != nil {
+		return counter, errors.Wrap(err, "[DATA][FetchAndIncreaseCounter][A]")
+	}
+	if _, err := tx.ExecContext(ctx, `UPDATE counter SET count = count + 1 WHERE company = ?`, company); err != nil {
+		return counter, errors.Wrap(err, "[DATA][FetchAndIncreaseCounter][B]")
+	}
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return counter, errors.Wrap(err, "[DATA][FetchAndIncreaseCounter]")
+	}
+	return counter, nil
+}

@@ -126,3 +126,22 @@ func (h *Handler) DeleteCustomer(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
 }
+
+func (h *Handler) ImportCustomersFromExcel(w http.ResponseWriter, r *http.Request) {
+	var (
+		err  error
+		resp response.Response
+	)
+	defer resp.RenderJSON(w, r)
+
+	ctx := r.Context()
+	err = h.stockSvc.ImportCustomersFromExcel(ctx)
+
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
+}

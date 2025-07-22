@@ -49,7 +49,6 @@ func (h *Handler) GetMachinesFiltered(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	result, metadata, err = h.stockSvc.GetMachinesFiltered(ctx, r.FormValue("keyword"), page, length)
 
-	
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
 		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
@@ -220,6 +219,25 @@ func (h *Handler) DeactivateMachine(w http.ResponseWriter, r *http.Request) {
 	machineID := req.MachineID
 
 	err := h.stockSvc.DeactivateMachine(ctx, machineID)
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
+}
+
+func (h *Handler) ImportMachineFromExcel(w http.ResponseWriter, r *http.Request) {
+	var (
+		err  error
+		resp response.Response
+	)
+	defer resp.RenderJSON(w, r)
+
+	ctx := r.Context()
+	err = h.stockSvc.ImportMachineFromExcel(ctx)
+
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
 		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())

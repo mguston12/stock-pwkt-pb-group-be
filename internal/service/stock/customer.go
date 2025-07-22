@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"stock/internal/entity/stock"
 	"stock/pkg/errors"
@@ -47,8 +48,35 @@ func (s Service) GetCustomersFiltered(ctx context.Context, keyword string, page,
 	return customers, lastPage, nil
 }
 
+func (s Service) GetCustomerID(ctx context.Context, company int) (string, error) {
+	com := ""
+
+	switch company {
+	case 1:
+		com = "PB"
+	case 2:
+		com = "PBM"
+	case 3:
+		com = "MMU"
+	}
+
+	id, err := s.data.FetchAndIncreaseCounter(ctx, company)
+	if err != nil {
+		return "", errors.Wrap(err, "[SERVICE][GetCustomerFiltered]")
+	}
+
+	return fmt.Sprintf("%s-%06d", com, id), nil
+}
+
 func (s Service) CreateCustomer(ctx context.Context, customer stock.Customer) error {
-	err := s.data.CreateCustomer(ctx, customer)
+	customerID, err := s.GetCustomerID(ctx, customer.Company)
+	if err != nil {
+		return errors.Wrap(err, "[SERVICE][CreateCustomer][1]")
+	}
+
+	customer.ID = customerID
+
+	err = s.data.CreateCustomer(ctx, customer)
 	if err != nil {
 		return errors.Wrap(err, "[SERVICE][CreateCustomer]")
 	}
