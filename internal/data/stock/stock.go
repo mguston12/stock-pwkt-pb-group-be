@@ -139,7 +139,11 @@ const (
 								(m.tipe_machine LIKE ? OR ? = ''))`
 
 	getMachineByID  = "GetMachineByID"
-	qGetMachineByID = `SELECT id_machine, tipe_machine, COALESCE(serial_number, '') AS serial_number, COALESCE(id_customer, '') AS id_customer FROM machine WHERE id_machine = ?`
+	qGetMachineByID = `SELECT id_machine, tipe_machine, COALESCE(serial_number, '') AS serial_number, COALESCE(m.id_customer, '') AS id_customer,
+						COALESCE(c.nama_customer, '') AS nama_customer , COALESCE(c.alamat, '') AS alamat 
+						FROM machine m  
+						LEFT JOIN customer c ON c.id_customer = m.id_customer 
+						WHERE id_machine = ?`
 
 	getMachineByIDCustomer  = "GetMachineByIDCustomer"
 	qGetMachineByIDCustomer = `SELECT id_machine, tipe_machine, COALESCE(serial_number, '') AS serial_number, COALESCE(id_customer, '') AS id_customer FROM machine WHERE id_customer = ?`
