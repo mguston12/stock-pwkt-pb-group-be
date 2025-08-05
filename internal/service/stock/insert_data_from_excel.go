@@ -23,7 +23,7 @@ func (s Service) ImportCustomersFromExcel(ctx context.Context) error {
 	if len(sheetNames) == 0 {
 		return errors.New("[SERVICE][ImportCustomersFromExcel][NO_SHEETS_FOUND]")
 	}
-	sheetName := sheetNames[6]
+	sheetName := sheetNames[0]
 
 	rows, err := f.Rows(sheetName)
 	if err != nil {
