@@ -172,7 +172,9 @@ const (
 						LEFT JOIN teknisi t ON r.id_teknisi = t.id_teknisi
 						LEFT JOIN customer c ON m.id_customer = c.id_customer
 						WHERE
-							((t.nama_teknisi LIKE ? OR ? = '')
+							(((t.nama_teknisi LIKE ? OR ? = '')
+						OR 
+							(t.id_teknisi LIKE ? OR ? = ''))
 						AND
 							(r.status_request LIKE ? OR ? = ''))
 						ORDER BY updated_at DESC
@@ -185,7 +187,9 @@ const (
 						LEFT JOIN teknisi t ON r.id_teknisi = t.id_teknisi
 						LEFT JOIN customer c ON m.id_customer = c.id_customer
 	 					WHERE
-							((t.nama_teknisi LIKE ? OR ? = '')
+							(((t.nama_teknisi LIKE ? OR ? = '')
+						OR 
+							(t.id_teknisi LIKE ? OR ? = ''))
 						AND
 							(status_request LIKE ? OR ? = ''))`
 

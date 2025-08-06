@@ -40,7 +40,7 @@ func (d Data) GetRequestsPage(ctx context.Context, teknisi, status string, offse
 
 	_keyword := "%" + teknisi + "%"
 
-	rows, err := d.stmt[getRequestsPage].QueryxContext(ctx, _keyword, _keyword, status, status, offset, limit)
+	rows, err := d.stmt[getRequestsPage].QueryxContext(ctx, _keyword, _keyword, _keyword, _keyword, status, status, offset, limit)
 	if err != nil {
 		return requests, errors.Wrap(err, "[DATA][GetRequestsPage]")
 	}
@@ -64,7 +64,7 @@ func (d Data) GetRequestsCount(ctx context.Context, teknisi, status string) ([]s
 
 	_keyword := "%" + teknisi + "%"
 
-	if err := d.stmt[getRequestsCount].QueryRowxContext(ctx, _keyword, _keyword, status, status).Scan(&count); err != nil {
+	if err := d.stmt[getRequestsCount].QueryRowxContext(ctx, _keyword, _keyword, _keyword, _keyword, status, status).Scan(&count); err != nil {
 		return requests, count, errors.Wrap(err, "[DATA][GetRequestsCount]")
 	}
 
