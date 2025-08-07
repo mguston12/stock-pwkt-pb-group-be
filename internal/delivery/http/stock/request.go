@@ -86,6 +86,37 @@ func (h *Handler) CreateRequest(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
 }
 
+func (h *Handler) CreateRequests(w http.ResponseWriter, r *http.Request) {
+	resp := response.Response{}
+	defer resp.RenderJSON(w, r)
+
+	ctx := r.Context()
+
+	var requests []stock.Request
+
+	err := json.NewDecoder(r.Body).Decode(&requests)
+	if err != nil {
+		resp = httpHelper.ParseErrorCode("invalid_request_payload")
+		log.Printf("[ERROR][%s][%s] %s | JSON Decode Failed: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	if len(requests) == 0 {
+		resp = httpHelper.ParseErrorCode("empty_request_list")
+		log.Printf("[ERROR][%s][%s] %s | Reason: Empty request list", r.RemoteAddr, r.Method, r.URL)
+		return
+	}
+
+	err = h.stockSvc.CreateRequests(ctx, requests)
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Failed to create requests: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	log.Printf("[INFO][%s][%s] %s | Successfully created %d requests", r.RemoteAddr, r.Method, r.URL, len(requests))
+}
+
 func (h *Handler) UpdateRequest(w http.ResponseWriter, r *http.Request) {
 	resp := response.Response{}
 	defer resp.RenderJSON(w, r)

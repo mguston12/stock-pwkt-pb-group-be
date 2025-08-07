@@ -58,6 +58,34 @@ func (s Service) CreateRequest(ctx context.Context, request stock.Request) error
 	return nil
 }
 
+func (s Service) CreateRequests(ctx context.Context, requests []stock.Request) error {
+	tx, err := s.data.BeginTx(ctx)
+	if err != nil {
+		return errors.Wrap(err, "[SERVICE][CreateRequests] gagal mulai transaksi")
+	}
+
+	defer func() {
+		if p := recover(); p != nil {
+			tx.Rollback()
+			panic(p)
+		}
+	}()
+
+	for _, request := range requests {
+		err := s.data.CreateRequestTx(ctx, tx, request)
+		if err != nil {
+			tx.Rollback()
+			return errors.Wrap(err, "[SERVICE][CreateRequests] gagal menyimpan request")
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		return errors.Wrap(err, "[SERVICE][CreateRequests] gagal commit transaksi")
+	}
+
+	return nil
+}
+
 func (s Service) UpdateRequest(ctx context.Context, request stock.Request) error {
 	err := s.data.UpdateRequest(ctx, request)
 	if err != nil {

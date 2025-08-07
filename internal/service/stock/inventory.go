@@ -2,7 +2,6 @@ package stock
 
 import (
 	"context"
-	"log"
 	"stock/internal/entity/stock"
 	"stock/pkg/errors"
 )
@@ -57,8 +56,6 @@ func (s Service) InventoryUsage(ctx context.Context, input stock.InventoryUsage)
 		Quantity:      inventory.Quantity - 1,
 	}
 
-	log.Println(inv)
-
 	err = s.data.UpdateInventory(ctx, inv)
 	if err != nil {
 		return errors.Wrap(err, "[SERVICE][InventoryUsage][2]")
@@ -79,6 +76,75 @@ func (s Service) InventoryUsage(ctx context.Context, input stock.InventoryUsage)
 	if err != nil {
 		return errors.Wrap(err, "[SERVICE][InventoryUsage][3]")
 	}
+	return nil
+}
+
+func (s Service) InventoryUsageBatch(ctx context.Context, inputs []stock.InventoryUsage) error {
+	tx, err := s.data.BeginTx(ctx)
+	if err != nil {
+		return errors.Wrap(err, "[SERVICE][InventoryUsageBatch][BeginTx]")
+	}
+
+	// rollback otomatis kalau gagal
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		}
+	}()
+
+	for _, input := range inputs {
+		inventory, err := s.data.GetInventoryByIDInvTx(ctx, tx, input.InventoryID)
+		if err != nil {
+			tx.Rollback()
+			return errors.Wrapf(err, "[SERVICE][InventoryUsageBatch][GetInventory][id=%d]", input.InventoryID)
+		}
+
+		if inventory.Quantity < input.Quantity {
+			tx.Rollback()
+			return errors.Errorf("Stok tidak cukup untuk sparepart '%s' (tersedia: %d, diminta: %d)",
+				inventory.NamaSparepart, inventory.Quantity, input.Quantity)
+		}
+
+		// Kurangi stok
+		updatedInventory := stock.Inventory{
+			ID:            input.InventoryID,
+			Teknisi:       input.UpdatedBy,
+			Sparepart:     inventory.Sparepart,
+			NamaSparepart: inventory.NamaSparepart,
+			Quantity:      inventory.Quantity - input.Quantity,
+		}
+
+		err = s.data.UpdateInventoryTx(ctx, tx, updatedInventory)
+		if err != nil {
+			tx.Rollback()
+			return errors.Wrapf(err, "[SERVICE][InventoryUsageBatch][UpdateInventory][id=%d]", input.InventoryID)
+		}
+
+		// Buat histori
+		history := stock.SparepartHistory{
+			IDTeknisi:       input.UpdatedBy,
+			IDMachine:       input.MachineID,
+			IDSparepart:     inventory.Sparepart,
+			Quantity:        input.Quantity,
+			Counter:         input.Counter,
+			CounterColour:   input.CounterColour,
+			CounterColourA3: input.CounterColourA3,
+			UpdatedBy:       input.UpdatedBy,
+		}
+
+		err = s.data.CreateSparepartHistoryTx(ctx, tx, history)
+		if err != nil {
+			tx.Rollback()
+			return errors.Wrapf(err, "[SERVICE][InventoryUsageBatch][CreateSparepartHistory][id=%d]", input.InventoryID)
+		}
+	}
+
+	// Semua berhasil
+	if err := tx.Commit(); err != nil {
+		return errors.Wrap(err, "[SERVICE][InventoryUsageBatch][Commit]")
+	}
+
 	return nil
 }
 

@@ -41,6 +41,7 @@ type StockHandler interface {
 	GetAllRequests(w http.ResponseWriter, r *http.Request)
 	GetRequestsPagination(w http.ResponseWriter, r *http.Request)
 	CreateRequest(w http.ResponseWriter, r *http.Request)
+	CreateRequests(w http.ResponseWriter, r *http.Request)
 	UpdateRequest(w http.ResponseWriter, r *http.Request)
 	DeleteRequest(w http.ResponseWriter, r *http.Request)
 
@@ -54,6 +55,7 @@ type StockHandler interface {
 	GetAllInventory(w http.ResponseWriter, r *http.Request)
 	GetInventoryByID(w http.ResponseWriter, r *http.Request)
 	InventoryUsage(w http.ResponseWriter, r *http.Request)
+	InventoryUsageBatch(w http.ResponseWriter, r *http.Request)
 	CreateInventory(w http.ResponseWriter, r *http.Request)
 	UpdateInventory(w http.ResponseWriter, r *http.Request)
 	DeleteInventory(w http.ResponseWriter, r *http.Request)

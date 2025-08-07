@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"database/sql"
 	"log"
 	"stock/internal/entity/stock"
 
@@ -140,4 +141,35 @@ func (d Data) CheckSparepartValidOrNot(ctx context.Context, id string) (int, err
 	}
 
 	return count, nil
+}
+
+func (d Data) BeginTx(ctx context.Context) (*sql.Tx, error) {
+	tx, err := d.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "[DATA][BeginTx]")
+	}
+	return tx, nil
+}
+
+func (d Data) CreateRequestTx(ctx context.Context, tx *sql.Tx, request stock.Request) error {
+	const query = `
+		INSERT INTO request (
+			id_teknisi, id_mesin, id_sparepart, quantity, status_request, updated_by
+		) VALUES (?, ?, ?, ?, ?, ?)
+	`
+
+	_, err := tx.ExecContext(ctx, query,
+		request.Teknisi,
+		request.Mesin,
+		request.Sparepart,
+		request.Quantity,
+		request.Status,
+		request.UpdatedBy,
+	)
+
+	if err != nil {
+		return errors.Wrap(err, "[DATA][CreateRequestTx]")
+	}
+
+	return nil
 }

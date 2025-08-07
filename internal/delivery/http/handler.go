@@ -61,6 +61,7 @@ func (s *Server) Handler() *mux.Router {
 	request.Use(middleware.AuthMiddleware)
 	request.HandleFunc("", s.Stock.GetRequestsPagination).Methods("GET")
 	request.HandleFunc("/create", s.Stock.CreateRequest).Methods("POST")
+	request.HandleFunc("/batch", s.Stock.CreateRequests).Methods("POST")
 	request.HandleFunc("/update", s.Stock.UpdateRequest).Methods("PUT")
 	request.HandleFunc("/delete", s.Stock.DeleteRequest).Methods("DELETE")
 
@@ -81,6 +82,7 @@ func (s *Server) Handler() *mux.Router {
 	inventory.Use(middleware.AuthMiddleware)
 	inventory.HandleFunc("", s.Stock.GetAllInventory).Methods("GET")
 	inventory.HandleFunc("/detail", s.Stock.GetInventoryByID).Methods("GET")
+	inventory.HandleFunc("/usage-batch", s.Stock.InventoryUsageBatch).Methods("POST")
 	inventory.HandleFunc("/usage", s.Stock.InventoryUsage).Methods("POST")
 	inventory.HandleFunc("/create", s.Stock.CreateInventory).Methods("POST")
 	inventory.HandleFunc("/update", s.Stock.UpdateInventory).Methods("PUT")

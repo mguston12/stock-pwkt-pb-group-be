@@ -82,6 +82,31 @@ func (h *Handler) InventoryUsage(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[INFO][%s][%s] %s", r.RemoteAddr, r.Method, r.URL)
 }
 
+func (h *Handler) InventoryUsageBatch(w http.ResponseWriter, r *http.Request) {
+	resp := response.Response{}
+	defer resp.RenderJSON(w, r)
+
+	ctx := r.Context()
+
+	var inputs []stock.InventoryUsage // harus slice/array di sini
+
+	err := json.NewDecoder(r.Body).Decode(&inputs)
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	err = h.stockSvc.InventoryUsageBatch(ctx, inputs)
+	if err != nil {
+		resp = httpHelper.ParseErrorCode(err.Error())
+		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())
+		return
+	}
+
+	log.Printf("[INFO][%s][%s] %s - Batch inventory usage success", r.RemoteAddr, r.Method, r.URL)
+}
+
 func (h *Handler) CreateInventory(w http.ResponseWriter, r *http.Request) {
 	resp := response.Response{}
 	defer resp.RenderJSON(w, r)

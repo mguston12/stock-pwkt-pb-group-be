@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"database/sql"
 	"stock/internal/entity/stock"
 )
 
@@ -51,6 +52,8 @@ type Data interface {
 	GetRequestsPage(ctx context.Context, teknisi, status string, offset, limit int) ([]stock.Request, error)
 	GetRequestsCount(ctx context.Context, teknisi, status string) ([]stock.Request, int, error)
 	CreateRequest(ctx context.Context, request stock.Request) error
+	CreateRequestTx(ctx context.Context, tx *sql.Tx, request stock.Request) error
+
 	UpdateRequest(ctx context.Context, request stock.Request) error
 	DeleteRequest(ctx context.Context, id string) error
 	DeleteRequestByIDSparepart(ctx context.Context, id string) error
@@ -100,6 +103,12 @@ type Data interface {
 	DeleteMachineHistory(ctx context.Context, id int) error
 
 	GetSparepartHistoryByMonth(ctx context.Context, bulan, tahun int) ([]stock.ReportData, error)
+
+	BeginTx(ctx context.Context) (*sql.Tx, error)
+
+	GetInventoryByIDInvTx(ctx context.Context, tx *sql.Tx, id int) (stock.Inventory, error)
+	UpdateInventoryTx(ctx context.Context, tx *sql.Tx, inv stock.Inventory) error
+	CreateSparepartHistoryTx(ctx context.Context, tx *sql.Tx, history stock.SparepartHistory) error
 }
 
 // Service ...

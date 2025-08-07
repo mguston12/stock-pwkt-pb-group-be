@@ -130,6 +130,7 @@ type MachineHistory struct {
 type InventoryUsage struct {
 	InventoryID     int    `json:"id_inventory"`
 	MachineID       string `json:"id_machine"`
+	Quantity        int    `json:"quantity"`
 	Counter         int    `json:"counter"`
 	CounterColour   int    `json:"counter_colour"`
 	CounterColourA3 int    `json:"counter_colour_a3"`
