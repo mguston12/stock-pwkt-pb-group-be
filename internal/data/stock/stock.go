@@ -50,7 +50,7 @@ const (
 	qUpdateSparepart = `UPDATE sparepart 
 						SET 
 							nama_sparepart = COALESCE(NULLIF(?,''), nama_sparepart), 
-							quantity = COALESCE(NULLIF(?,''), quantity)
+							quantity = COALESCE(?, quantity)
 						WHERE id_sparepart = ?`
 
 	deleteSparepart  = "DeleteSparepart"
