@@ -50,6 +50,7 @@ type SparepartHistory struct {
 	IDMachine       string    `db:"id_machine" json:"id_machine"`
 	IDSparepart     string    `db:"id_sparepart" json:"id_sparepart"`
 	NamaSparepart   string    `json:"nama_sparepart"`
+	Customer        string    `db:"nama_customer" json:"nama_customer"`
 	Quantity        int       `db:"quantity" json:"quantity"`
 	Counter         int       `db:"counter" json:"counter"`
 	CounterColour   int       `db:"counter_colour" json:"counter_colour"`
@@ -162,6 +163,13 @@ type User struct {
 type Supplier struct {
 	ID   int    `db:"id_supplier" json:"id_supplier"`
 	Nama string `db:"nama_supplier" json:"nama_supplier"`
+}
+
+type Visit struct {
+	ID        int       `db:"id_kunjungan" json:"id_kunjungan"`
+	MachineID string    `db:"id_machine" json:"id_machine"`
+	Notes     string    `db:"desc_kunjungan" json:"desc_kunjungan"`
+	Tanggal   time.Time `db:"tanggal_kunjungan" json:"tanggal_kunjungan"`
 }
 
 type LoginResponse struct {

@@ -71,6 +71,12 @@ func (s *Server) Handler() *mux.Router {
 	router.HandleFunc("/croncustomers", s.Stock.ImportCustomersFromExcel).Methods("GET")
 	router.HandleFunc("/cronmachines", s.Stock.ImportMachineFromExcel).Methods("GET")
 
+	visit := router.PathPrefix("/visits").Subrouter()
+	visit.HandleFunc("", s.Stock.GetVisitsByID).Methods("GET")
+	visit.HandleFunc("/create", s.Stock.CreateVisit).Methods("POST")
+	visit.HandleFunc("/update", s.Stock.UpdateVisit).Methods("PUT")
+	visit.HandleFunc("/delete", s.Stock.DeleteVisit).Methods("DELETE")
+
 	// Protected routes: /users/*
 	user := router.PathPrefix("/users").Subrouter()
 	user.Use(middleware.AuthMiddleware)

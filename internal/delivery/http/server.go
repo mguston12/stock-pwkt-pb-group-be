@@ -89,6 +89,11 @@ type StockHandler interface {
 	ExportExcel(w http.ResponseWriter, r *http.Request)
 	ImportCustomersFromExcel(w http.ResponseWriter, r *http.Request)
 	ImportMachineFromExcel(w http.ResponseWriter, r *http.Request)
+
+	GetVisitsByID(w http.ResponseWriter, r *http.Request)
+	CreateVisit(w http.ResponseWriter, r *http.Request)
+	UpdateVisit(w http.ResponseWriter, r *http.Request)
+	DeleteVisit(w http.ResponseWriter, r *http.Request)
 }
 
 // Server ...

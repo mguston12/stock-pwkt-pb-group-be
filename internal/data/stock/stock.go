@@ -58,12 +58,14 @@ const (
 
 	//History Sparepart
 	getAllSparepartHistory  = "GetAllSparepartHistory"
-	qGetAllSparepartHistory = `SELECT * FROM history_sparepart
+	qGetAllSparepartHistory = `SELECT hs.*, c.nama_customer FROM history_sparepart hs
+								LEFT JOIN machine m ON m.id_machine = hs.id_machine 
+								LEFT JOIN customer c ON c.id_customer = m.id_customer 
 								WHERE 
-									(id_teknisi LIKE ? OR ? = '')
-									AND (id_machine LIKE ? OR ? = '')
-									AND (id_sparepart LIKE ? OR ? = '')
-								ORDER BY updated_at DESC
+									(hs.id_teknisi LIKE ? OR ? = '')
+									AND (hs.id_machine LIKE ? OR ? = '')
+									AND (hs.id_sparepart LIKE ? OR ? = '')
+								ORDER BY hs.updated_at DESC
 								LIMIT ?, ?`
 
 	getAllSparepartHistoryCount  = "GetAllSparepartHistoryCount"
@@ -418,6 +420,21 @@ const (
 
 	deleteMachineHistory  = "DeleteMachineHistory"
 	qDeleteMachineHistory = `DELETE FROM machine_history WHERE id_history = ?`
+
+	getVisits  = "GetVisits"
+	qGetVisits = `SELECT * FROM kunjungan WHERE id_machine = ?`
+
+	createVisit  = "CreateVisit"
+	qCreateVisit = `INSERT INTO kunjungan(id_machine, desc_kunjungan) VALUES (?,?)`
+
+	updateVisit  = "UpdateVisit"
+	qUpdateVisit = `UPDATE kunjungan
+					SET 
+						desc_kunjungan = COALESCE(NULLIF(?,''), desc_kunjungan)
+					WHERE id_kunjungan = ?`
+
+	deleteVisit  = "DeleteVisit"
+	qDeleteVisit = `Delete FROM kunjungan WHERE id_kunjungan = ?`
 )
 
 var (
@@ -471,6 +488,8 @@ var (
 		{getAllMachineHistoryCount, qGetAllMachineHistoryCount},
 		{getMachineHistoryByID, qGetMachineHistoryByID},
 		{getLastMachineHistoryByMachineID, qGetLastMachineHistoryByMachineID},
+		//visit
+		{getVisits, qGetVisits},
 	}
 	insertStmt = []statement{
 		{createSparepart, qCreateSparepart},
@@ -485,6 +504,7 @@ var (
 		{createSupplier, qCreateSupplier},
 		{createReturnInventory, qCreateReturnInventory},
 		{createMachineHistory, qCreateMachineHistory},
+		{createVisit, qCreateVisit},
 	}
 	updateStmt = []statement{
 		{updateSparepart, qUpdateSparepart},
@@ -499,6 +519,7 @@ var (
 		{updateSupplier, qUpdateSupplier},
 		{approveReturnInventory, qApproveReturnInventory},
 		{updateMachineHistory, qUpdateMachineHistory},
+		{updateVisit, qUpdateVisit},
 	}
 	deleteStmt = []statement{
 		{deleteSparepart, qDeleteSparepart},
@@ -514,6 +535,7 @@ var (
 		{deletePembelianSparepartByIDSparepart, qDeletePembelianSparepartByIDSparepart},
 		{deleteSupplier, qDeleteSupplier},
 		{deleteMachineHistory, qDeleteMachineHistory},
+		{deleteVisit, qDeleteVisit},
 	}
 )
 
