@@ -21,9 +21,9 @@ func (h *Handler) GetVisitsByID(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
-	id, _ := strconv.Atoi(r.FormValue("id"))
+	// id, _ := strconv.Atoi(r.FormValue("id"))
 
-	result, err = h.stockSvc.GetVisitsByID(ctx, id)
+	result, err = h.stockSvc.GetVisitsByID(ctx, r.FormValue("id"))
 	if err != nil {
 		resp = httpHelper.ParseErrorCode(err.Error())
 		log.Printf("[ERROR][%s][%s] %s | Reason: %s", r.RemoteAddr, r.Method, r.URL, err.Error())

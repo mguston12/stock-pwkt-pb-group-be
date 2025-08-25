@@ -39,7 +39,7 @@ func (d Data) GetAllMachinesPage(ctx context.Context, keyword string, offset, li
 
 	_keyword := "%" + keyword + "%"
 
-	rows, err := d.stmt[getAllMachinesPage].QueryxContext(ctx, _keyword, _keyword, _keyword, _keyword, offset, limit)
+	rows, err := d.stmt[getAllMachinesPage].QueryxContext(ctx, _keyword, _keyword, _keyword, _keyword, _keyword, _keyword, offset, limit)
 	if err != nil {
 		return machines, errors.Wrap(err, "[DATA][GetAllMachinesPage]")
 	}
@@ -63,7 +63,7 @@ func (d Data) GetAllMachinesCount(ctx context.Context, keyword string) ([]stock.
 
 	_keyword := "%" + keyword + "%"
 
-	if err := d.stmt[getAllMachinesCount].QueryRowxContext(ctx, _keyword, _keyword, _keyword, _keyword).Scan(&count); err != nil {
+	if err := d.stmt[getAllMachinesCount].QueryRowxContext(ctx, _keyword, _keyword, _keyword, _keyword, _keyword, _keyword).Scan(&count); err != nil {
 		return machines, count, errors.Wrap(err, "[DATA][GetAllMachinesCount]")
 	}
 

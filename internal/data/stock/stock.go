@@ -130,7 +130,9 @@ const (
 							WHERE 
 								((m.id_machine LIKE ? OR ? = '')
 							OR
-								(m.tipe_machine LIKE ? OR ? = '')) 
+								(m.tipe_machine LIKE ? OR ? = '')
+							OR
+								(c.nama_customer LIKE ? OR ? = '')) 
 							LIMIT ?, ?`
 
 	getAllMachinesCount  = "GetAllMachinesCount"
@@ -138,7 +140,9 @@ const (
 							WHERE 
 								((m.id_machine LIKE ? OR ? = '')
 							OR
-								(m.tipe_machine LIKE ? OR ? = ''))`
+								(m.tipe_machine LIKE ? OR ? = '')
+							OR
+								(c.nama_customer LIKE ? OR ? = ''))`
 
 	getMachineByID  = "GetMachineByID"
 	qGetMachineByID = `SELECT id_machine, tipe_machine, COALESCE(serial_number, '') AS serial_number, COALESCE(m.id_customer, '') AS id_customer,
@@ -434,7 +438,7 @@ const (
 					WHERE id_kunjungan = ?`
 
 	deleteVisit  = "DeleteVisit"
-	qDeleteVisit = `Delete FROM kunjungan WHERE id_kunjungan = ?`
+	qDeleteVisit = `DELETE FROM kunjungan WHERE id_kunjungan = ?`
 )
 
 var (

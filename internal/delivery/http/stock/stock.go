@@ -88,7 +88,7 @@ type StockSvc interface {
 
 	CreateRequests(ctx context.Context, requests []stock.Request) error
 
-	GetVisitsByID(ctx context.Context, id int) ([]stock.Visit, error)
+	GetVisitsByID(ctx context.Context, id string) ([]stock.Visit, error)
 	CreateVisit(ctx context.Context, visit stock.Visit) error
 	UpdateVisit(ctx context.Context, visit stock.Visit) error
 	DeleteVisit(ctx context.Context, id int) error

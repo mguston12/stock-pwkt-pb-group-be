@@ -8,7 +8,7 @@ import (
 )
 
 // GetAllVisits ...
-func (s Service) GetVisitsByID(ctx context.Context, id int) ([]stock.Visit, error) {
+func (s Service) GetVisitsByID(ctx context.Context, id string) ([]stock.Visit, error) {
 	visit, err := s.data.GetVisitsByID(ctx, id)
 	if err != nil {
 		return visit, errors.Wrap(err, "[SERVICE][GetVisitByID]")

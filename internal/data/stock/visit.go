@@ -10,12 +10,14 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func (d Data) GetVisitsByID(ctx context.Context, id int) ([]stock.Visit, error) {
+func (d Data) GetVisitsByID(ctx context.Context, id string) ([]stock.Visit, error) {
 	var (
 		rows  *sqlx.Rows
 		datas []stock.Visit
 		err   error
 	)
+
+	log.Println("id : ", id)
 
 	rows, err = d.stmt[getVisits].QueryxContext(ctx, id)
 	if err != nil {

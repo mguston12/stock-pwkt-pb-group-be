@@ -110,7 +110,7 @@ type Data interface {
 	UpdateInventoryTx(ctx context.Context, tx *sql.Tx, inv stock.Inventory) error
 	CreateSparepartHistoryTx(ctx context.Context, tx *sql.Tx, history stock.SparepartHistory) error
 
-	GetVisitsByID(ctx context.Context, id int) ([]stock.Visit, error)
+	GetVisitsByID(ctx context.Context, id string) ([]stock.Visit, error)
 	CreateVisit(ctx context.Context, visit stock.Visit) error
 	UpdateVisit(ctx context.Context, visit stock.Visit) error
 	DeleteVisit(ctx context.Context, id int) error
