@@ -144,3 +144,58 @@ func (s Service) DeleteRequest(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (s Service) CancelRequest(ctx context.Context, request stock.Request) error {
+	selectedRequest, err := s.data.GetRequestByID(ctx, request.ID)
+	if err != nil {
+		return errors.Wrap(err, "[SERVICE][UpdateRequest]")
+	}
+
+	req := stock.Request{
+		ID:        selectedRequest.ID,
+		Teknisi:   selectedRequest.Teknisi,
+		Sparepart: selectedRequest.Sparepart,
+		Quantity:  selectedRequest.Quantity,
+		Status:    "Request",
+		UpdatedBy: "admin",
+	}
+
+	if selectedRequest.Status == "Disetujui" {
+		err = s.data.UpdateRequest(ctx, req)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][UpdateRequest]")
+		}
+
+		inventoryTeknisi, err := s.data.GetInventoryByIDAndSparepart(ctx, req.Teknisi, req.Sparepart)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][UpdateRequest]")
+		}
+
+		inventoryTeknisi.Quantity -= req.Quantity
+
+		err = s.data.UpdateInventory(ctx, inventoryTeknisi)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][UpdateRequest]")
+		}
+
+		sparepart, err := s.data.GetSparepartByID(ctx, req.Sparepart)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][UpdateRequest][GetSparepartByID]")
+		}
+
+		sparepart.Quantity = sparepart.Quantity + req.Quantity
+
+		err = s.data.UpdateSparepart(ctx, sparepart)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][UpdateRequest][UpdateSparepart]")
+		}
+	} else if selectedRequest.Status == "Ditolak" {
+		err = s.data.UpdateRequest(ctx, req)
+		if err != nil {
+			return errors.Wrap(err, "[SERVICE][UpdateRequest]")
+		}
+
+	}
+
+	return nil
+}

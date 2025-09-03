@@ -199,6 +199,9 @@ const (
 						AND
 							(status_request LIKE ? OR ? = ''))`
 
+	getRequestByID  = "GetRequestByID"
+	qGetRequestByID = `SELECT * FROM request WHERE id_request = ?`
+
 	createRequest  = "CreateRequest"
 	qCreateRequest = `INSERT INTO request(id_teknisi, id_mesin, 
 						id_sparepart, quantity, status_request, updated_by) VALUES (?,?,?,?,?,?)`
@@ -275,7 +278,12 @@ const (
 	getInventoryByID  = "GetInventoryByID"
 	qGetInventoryByID = `SELECT i.*, sp.nama_sparepart FROM inventory i
 						LEFT JOIN sparepart sp ON i.id_sparepart = sp.id_sparepart 
-						WHERE id_teknisi = ? AND i.quantity > 0`
+						WHERE i.id_teknisi = ? AND i.quantity > 0`
+
+	getInventoryByIDAndSparepart  = "GetInventoryByIDAndSparepart"
+	qGetInventoryByIDAndSparepart = `SELECT i.*, sp.nama_sparepart FROM inventory i
+						LEFT JOIN sparepart sp ON i.id_sparepart = sp.id_sparepart 
+						WHERE i.id_teknisi = ? AND i.id_sparepart = ?`
 
 	getInventoryByIDInv  = "GetInventoryByIDInv"
 	qGetInventoryByIDInv = `SELECT i.*, sp.nama_sparepart FROM inventory i
@@ -465,6 +473,7 @@ var (
 		{getAllRequests, qGetAllRequests},
 		{getRequestsPage, qGetRequestsPage},
 		{getRequestsCount, qGetRequestsCount},
+		{getRequestByID, qGetRequestByID},
 		//customer
 		{getAllCustomers, qGetAllCustomers},
 		{getAllCustomersPage, qGetAllCustomersPage},
@@ -475,6 +484,7 @@ var (
 		{getAllInventory, qGetAllInventory},
 		{getInventoryByID, qGetInventoryByID},
 		{getInventoryByIDInv, qGetInventoryByIDInv},
+		{getInventoryByIDAndSparepart, qGetInventoryByIDAndSparepart},
 		//pembelian sparepart
 		{getPembelianSparepart, qGetPembelianSparepart},
 		{getPembelianSparepartByID, qGetPembelianSparepartByID},

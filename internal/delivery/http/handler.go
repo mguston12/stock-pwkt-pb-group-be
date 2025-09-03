@@ -63,6 +63,7 @@ func (s *Server) Handler() *mux.Router {
 	request.HandleFunc("/create", s.Stock.CreateRequest).Methods("POST")
 	request.HandleFunc("/batch", s.Stock.CreateRequests).Methods("POST")
 	request.HandleFunc("/update", s.Stock.UpdateRequest).Methods("PUT")
+	request.HandleFunc("/cancel", s.Stock.CancelRequest).Methods("PUT")
 	request.HandleFunc("/delete", s.Stock.DeleteRequest).Methods("DELETE")
 
 	// Public route: /users/login

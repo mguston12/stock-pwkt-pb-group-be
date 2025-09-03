@@ -2,6 +2,7 @@ package stock
 
 import (
 	"context"
+	"log"
 	"stock/internal/entity/stock"
 
 	"stock/pkg/errors"
@@ -64,6 +65,16 @@ func (d Data) GetInventoryByIDInv(ctx context.Context, id int) (stock.Inventory,
 
 	if err := d.stmt[getInventoryByIDInv].QueryRowxContext(ctx, id).StructScan(&inventory); err != nil {
 		return inventory, errors.Wrap(err, "[DATA][GetInventoryByIDInv]")
+	}
+
+	return inventory, nil
+}
+
+func (d Data) GetInventoryByIDAndSparepart(ctx context.Context, id, sparepart string) (stock.Inventory, error) {
+	inventory := stock.Inventory{}
+
+	if err := d.stmt[getInventoryByIDAndSparepart].QueryRowxContext(ctx, id, sparepart).StructScan(&inventory); err != nil {
+		return inventory, errors.Wrap(err, "[DATA][GetInventoryByIDAndSparepart]")
 	}
 
 	return inventory, nil

@@ -42,6 +42,7 @@ type StockHandler interface {
 	GetRequestsPagination(w http.ResponseWriter, r *http.Request)
 	CreateRequest(w http.ResponseWriter, r *http.Request)
 	CreateRequests(w http.ResponseWriter, r *http.Request)
+	CancelRequest(w http.ResponseWriter, r *http.Request)
 	UpdateRequest(w http.ResponseWriter, r *http.Request)
 	DeleteRequest(w http.ResponseWriter, r *http.Request)
 

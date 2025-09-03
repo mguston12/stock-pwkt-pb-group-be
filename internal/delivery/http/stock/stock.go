@@ -37,6 +37,7 @@ type StockSvc interface {
 	GetAllRequests(ctx context.Context) ([]stock.Request, error)
 	GetRequestsPagination(ctx context.Context, keyword, status string, page, length int) ([]stock.Request, int, error)
 	CreateRequest(ctx context.Context, request stock.Request) error
+	CancelRequest(ctx context.Context, request stock.Request) error
 	UpdateRequest(ctx context.Context, request stock.Request) error
 	DeleteRequest(ctx context.Context, id string) error
 

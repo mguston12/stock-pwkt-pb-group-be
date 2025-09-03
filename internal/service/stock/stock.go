@@ -51,6 +51,7 @@ type Data interface {
 	GetAllRequests(ctx context.Context) ([]stock.Request, error)
 	GetRequestsPage(ctx context.Context, teknisi, status string, offset, limit int) ([]stock.Request, error)
 	GetRequestsCount(ctx context.Context, teknisi, status string) ([]stock.Request, int, error)
+	GetRequestByID(ctx context.Context, id int) (stock.Request, error)
 	CreateRequest(ctx context.Context, request stock.Request) error
 	CreateRequestTx(ctx context.Context, tx *sql.Tx, request stock.Request) error
 
@@ -66,6 +67,7 @@ type Data interface {
 	GetAllInventory(ctx context.Context) ([]stock.Inventory, error)
 	GetInventoryByID(ctx context.Context, id string) ([]stock.Inventory, error)
 	GetInventoryByIDInv(ctx context.Context, id int) (stock.Inventory, error)
+	GetInventoryByIDAndSparepart(ctx context.Context, id, sparepart string) (stock.Inventory, error)
 	CreateInventory(ctx context.Context, inventory stock.Inventory) error
 	UpdateInventory(ctx context.Context, inventory stock.Inventory) error
 	DeleteInventory(ctx context.Context, id_teknisi, id_sparepart string) error

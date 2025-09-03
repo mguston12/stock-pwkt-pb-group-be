@@ -72,6 +72,16 @@ func (d Data) GetRequestsCount(ctx context.Context, teknisi, status string) ([]s
 	return requests, count, nil
 }
 
+func (d Data) GetRequestByID(ctx context.Context, id int) (stock.Request, error) {
+	request := stock.Request{}
+
+	if err := d.stmt[getRequestByID].QueryRowxContext(ctx, id).StructScan(&request); err != nil {
+		return request, errors.Wrap(err, "[DATA][GetRequestByID]")
+	}
+
+	return request, nil
+}
+
 func (d Data) CreateRequest(ctx context.Context, request stock.Request) error {
 	_, err := d.stmt[createRequest].ExecContext(ctx,
 		request.Teknisi,
