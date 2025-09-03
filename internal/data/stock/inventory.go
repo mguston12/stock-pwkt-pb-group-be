@@ -2,7 +2,6 @@ package stock
 
 import (
 	"context"
-	"log"
 	"stock/internal/entity/stock"
 
 	"stock/pkg/errors"
