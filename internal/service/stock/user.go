@@ -2,9 +2,9 @@ package stock
 
 import (
 	"context"
-	"stock/internal/entity/stock"
-	"stock/pkg/auth"
-	"stock/pkg/errors"
+	"stock-pwt/internal/entity/stock"
+	"stock-pwt/pkg/auth"
+	"stock-pwt/pkg/errors"
 
 	"golang.org/x/crypto/bcrypt"
 )

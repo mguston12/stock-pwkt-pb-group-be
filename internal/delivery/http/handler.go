@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"stock/internal/middleware"
-	"stock/pkg/response"
+	"stock-pwt/internal/middleware"
+	"stock-pwt/pkg/response"
 
 	"github.com/gorilla/mux"
 )

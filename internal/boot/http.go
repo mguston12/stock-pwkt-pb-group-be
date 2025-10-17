@@ -4,14 +4,14 @@ import (
 	"log"
 	"net/http"
 
-	"stock/internal/config"
+	"stock-pwt/internal/config"
 
 	"github.com/jmoiron/sqlx"
 
-	stockData "stock/internal/data/stock"
-	stockServer "stock/internal/delivery/http"
-	stockHandler "stock/internal/delivery/http/stock"
-	stockService "stock/internal/service/stock"
+	stockData "stock-pwt/internal/data/stock"
+	stockServer "stock-pwt/internal/delivery/http"
+	stockHandler "stock-pwt/internal/delivery/http/stock"
+	stockService "stock-pwt/internal/service/stock"
 )
 
 // HTTP will load configuration, do dependency injection and then start the HTTP server

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"math"
-	"stock/internal/entity/stock"
-	"stock/pkg/errors"
+	"stock-pwt/internal/entity/stock"
+	"stock-pwt/pkg/errors"
 )
 
 // GetAllCustomers ...
@@ -58,6 +58,8 @@ func (s Service) GetCustomerID(ctx context.Context, company int) (string, error)
 		com = "PBM"
 	case 3:
 		com = "MMU"
+	case 4:
+		com = "PWT"
 	}
 
 	id, err := s.data.FetchAndIncreaseCounter(ctx, company)

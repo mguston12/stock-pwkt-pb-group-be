@@ -3,7 +3,7 @@ package stock
 import (
 	"context"
 	"fmt"
-	"stock/internal/entity/stock"
+	"stock-pwt/internal/entity/stock"
 )
 
 func (d Data) GetSparepartHistoryByMonth(ctx context.Context, bulan, tahun int) ([]stock.ReportData, error) {

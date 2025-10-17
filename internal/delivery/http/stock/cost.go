@@ -3,9 +3,9 @@ package stock
 import (
 	"log"
 	"net/http"
-	httpHelper "stock/internal/delivery/http"
-	"stock/internal/entity/stock"
-	"stock/pkg/response"
+	httpHelper "stock-pwt/internal/delivery/http"
+	"stock-pwt/internal/entity/stock"
+	"stock-pwt/pkg/response"
 	"strconv"
 )
 

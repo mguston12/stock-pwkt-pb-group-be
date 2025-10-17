@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"stock/internal/boot"
+	"stock-pwt/internal/boot"
 
 	_ "github.com/go-sql-driver/mysql"
 )

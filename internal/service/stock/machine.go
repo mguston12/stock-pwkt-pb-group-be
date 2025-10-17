@@ -3,8 +3,8 @@ package stock
 import (
 	"context"
 	"math"
-	"stock/internal/entity/stock"
-	"stock/pkg/errors"
+	"stock-pwt/internal/entity/stock"
+	"stock-pwt/pkg/errors"
 )
 
 // GetAllMachines ...

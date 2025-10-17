@@ -3,7 +3,7 @@ package stock
 import (
 	"context"
 	"database/sql"
-	"stock/internal/entity/stock"
+	"stock-pwt/internal/entity/stock"
 )
 
 // Data ...

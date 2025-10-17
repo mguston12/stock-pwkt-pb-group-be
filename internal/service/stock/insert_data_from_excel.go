@@ -3,8 +3,8 @@ package stock
 import (
 	"context"
 	"log"
-	"stock/internal/entity/stock"
-	"stock/pkg/errors"
+	"stock-pwt/internal/entity/stock"
+	"stock-pwt/pkg/errors"
 	"strconv"
 
 	"github.com/xuri/excelize/v2"

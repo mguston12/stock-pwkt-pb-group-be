@@ -2,9 +2,9 @@ package stock
 
 import (
 	"context"
-	"stock/internal/entity/stock"
+	"stock-pwt/internal/entity/stock"
 
-	"stock/pkg/errors"
+	"stock-pwt/pkg/errors"
 )
 
 func (d Data) GetUserByUsername(ctx context.Context, username string) (stock.User, error) {

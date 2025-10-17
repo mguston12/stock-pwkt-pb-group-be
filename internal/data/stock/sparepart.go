@@ -3,9 +3,9 @@ package stock
 import (
 	"context"
 	"fmt"
-	"stock/internal/entity/stock"
+	"stock-pwt/internal/entity/stock"
 
-	"stock/pkg/errors"
+	"stock-pwt/pkg/errors"
 
 	"github.com/jmoiron/sqlx"
 )

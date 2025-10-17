@@ -1,0 +1,5 @@
+server:
+    port: ":8082"
+database:
+    # master: "root:Admin#1234@tcp(127.0.0.1:3306)/stock?parseTime=true&loc=Asia%2FJakarta"
+    master: "stock_user:StockUserPass123!@tcp(202.10.44.7:3306)/stock-pwt?parseTime=true&loc=Asia%2FJakarta"

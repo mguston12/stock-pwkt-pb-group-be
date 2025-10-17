@@ -2,8 +2,8 @@ package stock
 
 import (
 	"context"
-	"stock/internal/entity/stock"
-	"stock/pkg/errors"
+	"stock-pwt/internal/entity/stock"
+	"stock-pwt/pkg/errors"
 )
 
 func (d Data) GetSparepartCost(ctx context.Context, filter stock.SparepartCostFilter) ([]stock.SparepartCostResult, error) {

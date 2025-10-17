@@ -2,7 +2,7 @@ package stock
 
 import (
 	"fmt"
-	"stock/internal/entity/stock"
+	"stock-pwt/internal/entity/stock"
 
 	"github.com/xuri/excelize/v2"
 	"golang.org/x/net/context"

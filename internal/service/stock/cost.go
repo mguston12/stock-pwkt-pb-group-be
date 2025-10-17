@@ -2,7 +2,7 @@ package stock
 
 import (
 	"context"
-	"stock/internal/entity/stock"
+	"stock-pwt/internal/entity/stock"
 )
 
 // GetSparepartCost ...

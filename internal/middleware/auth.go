@@ -3,7 +3,7 @@ package middleware
 import (
 	"context"
 	"net/http"
-	"stock/pkg/auth" // import your JWT helper
+	"stock-pwt/pkg/auth" // import your JWT helper
 )
 
 type contextKey string

@@ -51,8 +51,8 @@ func WithConfigFile(file string) Option {
 
 func getDefaultConfigFile() string {
 	var (
-		repoPath     = filepath.Join(os.Getenv("GOPATH"), "src/stock/")
-		configPath   = filepath.Join(repoPath, "files/etc/stock/stock.development.yaml")
+		repoPath     = filepath.Join(os.Getenv("GOPATH"), "src/stock-pwt/")
+		configPath   = filepath.Join(repoPath, "files/etc/stock-pwt/stock.development.yaml")
 		namespace, _ = ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/namespace")
 	)
 

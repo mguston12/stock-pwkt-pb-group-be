@@ -1,7 +1,7 @@
 package http
 
 import (
-	"stock/pkg/response"
+	"stock-pwt/pkg/response"
 	"strings"
 )
 

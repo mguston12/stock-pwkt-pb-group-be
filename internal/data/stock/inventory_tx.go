@@ -3,9 +3,9 @@ package stock
 import (
 	"context"
 	"database/sql"
-	"stock/internal/entity/stock"
+	"stock-pwt/internal/entity/stock"
 
-	"stock/pkg/errors"
+	"stock-pwt/pkg/errors"
 )
 
 // Transaction
